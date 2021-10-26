@@ -9,4 +9,6 @@ for sample_file in *.tab; do grep "read_depth" "$sample_file" > rd_"$sample_file
 # get mean and sd
 for sample_file in *.tab; do awk 'BEGIN{OFS="\t"}{x+=$3; y+=$3^2}END{print x/NR,sqrt(y/NR-(x/NR)^2)}' $sample_file >> sd_coverage.txt; done
 
-# combine 
+# include sample names
+ls *.tab | while read file; do echo "${file//_coverage.tab}" >> file_names.txt; done
+paste -d '\t' file_names.txt sd_coverage.txt > sd_cov.txt
