@@ -1,1 +1,12 @@
+# create links to all coverage.tab files
+ls ../assembly_new/results/ > samples.txt
+while read -r line; do ln -s ~/validation_pipelineUpdate/downsampling/assembly_new/results/"$line"/3_quality/remapping/coverage.tab "$line"_new_coverage.tab; done < samples.txt
+while read -r line; do ln -s ~/validation_pipelineUpdate/downsampling/assembly_old/results/"$line"/3_quality/remapping/coverage.tab "$line"_old_coverage.tab; done < samples.txt 
 
+# create a file with only the read_depths for all samples
+for sample_file in *.tab; do grep "read_depth" "$sample_file" > rd_"$sample_file"; done
+
+# get mean and sd
+for sample_file in *.tab; do awk 'BEGIN{OFS="\t"}{x+=$3; y+=$3^2}END{print x/NR,sqrt(y/NR-(x/NR)^2)}' $sample_file >> sd_coverage.txt; done
+
+# combine 
