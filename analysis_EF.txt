@@ -1,5 +1,5 @@
 # get all entries with "van"
-for file in cat *.tab; do grep -i van $file >> all_van.tab; done
+for file in *.tab; do grep -i van $file >> all_van.tab; done
 
 # remove deeparg_SR results
 grep -v deeparg_v_1.0.2_SR all_van.tab > van.tab
