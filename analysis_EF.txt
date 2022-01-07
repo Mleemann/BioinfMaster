@@ -1,5 +1,8 @@
-# get all entries with "van"
-for file in *.tab; do grep -i van $file >> all_van.tab; done
-
-# remove deeparg_SR results
-grep -v deeparg_v_1.0.2_SR all_van.tab > van.tab
+# get all entries of "van" for each tool over all samples
+ls > samples.txt
+while read -r file; do  grep -i van $file/"$file"_abricate* >> van_abricate.tab; done < samples.txt 
+while read -r file; do  grep -i van $file/"$file"_amrfinder* >> van_amrfinder.tab; done < samples.txt 
+while read -r file; do  grep -i van $file/"$file"_rgi* >> van_rgi.tab; done < samples.txt 
+while read -r file; do  grep -i van $file/"$file"_sraX_*.tsv >> van_sraX.tab; done < samples.txt
+while read -r file; do  grep -i van $file/"$file"_resfinder_*/ResFinder_results_tab.txt >> van_resfinder.tab; done < samples.txt 
+while read -r file; do  grep -i van $file/deeparg_LS/* >> van_deepargLS.tab; done < samples.txt 
