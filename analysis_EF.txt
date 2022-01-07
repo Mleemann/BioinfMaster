@@ -9,6 +9,6 @@ while read -r file; do  grep -i van $file/deeparg_LS/* >> van_deepargLS.tab; don
 while read -r file; do  grep -i van $file/deeparg_SR/*.deeparg.mapping*.ARG >> van_deepargSR.tab; done < samples.txt 
 
 while read -r file; do grep -i van */resistance/abricate/"$file"_abricate_argannot.tab >> van_abricate_argannot.tab; done < samples_EF.txt
-
+sort van_abricate_argannot.tab > van_abricate_argannot_sorted.tab 
 
 # run phenotypes.R script to get the phenotype/mic table for vancomycin
