@@ -7,3 +7,8 @@ while read -r file; do  grep -i van $file/"$file"_sraX_*.tsv >> van_sraX.tab; do
 while read -r file; do  grep -i van $file/"$file"_resfinder_*/ResFinder_results_tab.txt >> van_resfinder.tab; done < samples.txt 
 while read -r file; do  grep -i van $file/deeparg_LS/* >> van_deepargLS.tab; done < samples.txt 
 while read -r file; do  grep -i van $file/deeparg_SR/*.deeparg.mapping*.ARG >> van_deepargSR.tab; done < samples.txt 
+
+
+# run phenotypes.R script to get the phenotype table
+# extract vancomycin values
+cut -d';' -f1,31 phenotypes_EF.csv > vanc_pheno_EF.csv
