@@ -135,7 +135,7 @@ for_heatmap[for_heatmap == "c(R, U)"] <- "R"
 for_heatmap[for_heatmap == "c(R, S)"] <- "R"
 for_heatmap[for_heatmap == "c(S, R)"] <- "R"
 
-# correlation values: R/R = 1, S/S = 2, S/R = 3, R/S = 4
+# condordance values: R/R = 1, S/S = 2, S/R = 3, R/S = 4
 for_heatmap$van_ncbi <- ifelse(for_heatmap$Vancomycin == "S" & for_heatmap$van_ncbi == "FALSE", 2,
                                ifelse(for_heatmap$Vancomycin == "S" & for_heatmap$van_ncbi == "TRUE", 3,
                                       ifelse(for_heatmap$Vancomycin == "R" & for_heatmap$van_ncbi == "TRUE", 1, 4)))
@@ -188,9 +188,9 @@ for_heatmap$van_deeparg_SR_unique <- ifelse(for_heatmap$Vancomycin == "S" & for_
 heatmap_table <- pivot_longer(data = for_heatmap, 
                           cols = -c(1:3),
                           names_to = "ToolDB", 
-                          values_to = "Correlation")
+                          values_to = "Concordance")
 
-heatmap_table$Correlation <- as.character(heatmap_table$Correlation)
+heatmap_table$Concordance <- as.character(heatmap_table$Concordance)
 heatmap_table[heatmap_table == "van_ncbi"] <- "ncbi"
 heatmap_table[heatmap_table == "van_card"] <- "card"
 heatmap_table[heatmap_table == "van_resfinder"] <- "resfinder"
@@ -215,7 +215,7 @@ colors <- c("darkgreen", "green", "orange", "red")
 
 EF_heatmap <- ggplot(data = heatmap_table, mapping = aes(x = ToolDB,
                                                        y = Sample_id,
-                                                       fill = Correlation)) +
+                                                       fill = Concordance)) +
   geom_tile(colour="white", size=0.4) +
   scale_fill_manual(values = colors, labels = c("R/R", "S/S", "S/R", "R/S")) +
   labs(x = "", y = "") +
