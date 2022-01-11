@@ -135,7 +135,7 @@ for_heatmap[for_heatmap == "c(R, U)"] <- "R"
 for_heatmap[for_heatmap == "c(R, S)"] <- "R"
 for_heatmap[for_heatmap == "c(S, R)"] <- "R"
 
-# condordance values: R/R = 1, S/S = 2, S/R = 3, R/S = 4
+# concordance values: R/R = 1, S/S = 2, S/R = 3, R/S = 4
 for_heatmap$van_ncbi <- ifelse(for_heatmap$Vancomycin == "S" & for_heatmap$van_ncbi == "FALSE", 2,
                                ifelse(for_heatmap$Vancomycin == "S" & for_heatmap$van_ncbi == "TRUE", 3,
                                       ifelse(for_heatmap$Vancomycin == "R" & for_heatmap$van_ncbi == "TRUE", 1, 4)))
