@@ -109,8 +109,20 @@ for(i in 1:length(deeparg_SR_unique[,1])) {
   genes <- unlist(strsplit(deeparg_SR_unique[i,6], "\\|"))
   deeparg_SR_unique[i,6] <- genes[length(genes)]
 }
-
 deeparg_SR_unique <- deeparg_SR_unique[-c(which(deeparg_SR_unique$V6 == "undefined")), ]
+
+resfinder_as <- read.table(('van_resfinder_assembly.tab'), sep = "\t")
+if (length(which(resfinder_as$V2 < 95)) != 0) {
+  resfinder_as <- resfinder_as[-c(which(resfinder_as$V2 < 95)),]
+}
+resfinder_as$V6 <- gsub('gnl\\|USB\\|','', resfinder_as$V6)
+resfinder_as$V6 <- gsub('(_\\d*)','', resfinder_as$V6)
+
+resfinder_re <- read.table(('van_resfinder_reads.tab'), sep = "\t")
+if (length(which(resfinder_re$V2 < 95)) != 0) {
+  resfinder_re <- resfinder_re[-c(which(resfinder_re$V2 < 95)),]
+}
+
 
 # check if van found for sample_id and include it into the table --> TRUE van present
 EF_abricate$van_ncbi <- EF_abricate$Sample_id %in% abr_ncbi$V1
@@ -125,6 +137,8 @@ EF_abricate$van_srax_b <- EF_abricate$Sample_id %in% srax_basic$V2
 EF_abricate$van_srax_e <- EF_abricate$Sample_id %in% srax_ext$V2
 EF_abricate$van_deeparg_LS <- EF_abricate$Sample_id %in% deeparg_LS$V4
 EF_abricate$van_deeparg_SR_unique <- EF_abricate$Sample_id %in% deeparg_SR_unique$V1
+EF_abricate$van_resfinder_as <- EF_abricate$Sample_id %in% resfinder_as$V6
+EF_abricate$van_resfinder_re <- EF_abricate$Sample_id %in% resfinder_re$V10
 
 # creating a heatmap 
 for_heatmap <- EF_abricate
@@ -135,7 +149,7 @@ for_heatmap[for_heatmap == "c(R, U)"] <- "R"
 for_heatmap[for_heatmap == "c(R, S)"] <- "R"
 for_heatmap[for_heatmap == "c(S, R)"] <- "R"
 
-# concordance values: R/R = 1, S/S = 2, S/R = 3, R/S = 4
+# Concordance values: R/R = 1, S/S = 2, S/R = 3, R/S = 4
 for_heatmap$van_ncbi <- ifelse(for_heatmap$Vancomycin == "S" & for_heatmap$van_ncbi == "FALSE", 2,
                                ifelse(for_heatmap$Vancomycin == "S" & for_heatmap$van_ncbi == "TRUE", 3,
                                       ifelse(for_heatmap$Vancomycin == "R" & for_heatmap$van_ncbi == "TRUE", 1, 4)))
@@ -184,6 +198,15 @@ for_heatmap$van_deeparg_SR_unique <- ifelse(for_heatmap$Vancomycin == "S" & for_
                                      ifelse(for_heatmap$Vancomycin == "S" & for_heatmap$van_deeparg_SR_unique == "TRUE", 3,
                                             ifelse(for_heatmap$Vancomycin == "R" & for_heatmap$van_deeparg_SR_unique == "TRUE", 1, 4)))
 
+for_heatmap$van_resfinder_as <- ifelse(for_heatmap$Vancomycin == "S" & for_heatmap$van_resfinder_as == "FALSE", 2,
+                                            ifelse(for_heatmap$Vancomycin == "S" & for_heatmap$van_resfinder_as == "TRUE", 3,
+                                                   ifelse(for_heatmap$Vancomycin == "R" & for_heatmap$van_resfinder_as == "TRUE", 1, 4)))
+
+for_heatmap$van_resfinder_re <- ifelse(for_heatmap$Vancomycin == "S" & for_heatmap$van_resfinder_re == "FALSE", 2,
+                                       ifelse(for_heatmap$Vancomycin == "S" & for_heatmap$van_resfinder_re == "TRUE", 3,
+                                              ifelse(for_heatmap$Vancomycin == "R" & for_heatmap$van_resfinder_re == "TRUE", 1, 4)))
+
+
 # transform data for heatmap
 heatmap_table <- pivot_longer(data = for_heatmap, 
                           cols = -c(1:3),
@@ -202,11 +225,14 @@ heatmap_table[heatmap_table == "van_srax_b"] <- "basic"
 heatmap_table[heatmap_table == "van_srax_e"] <- "ext"
 heatmap_table[heatmap_table == "van_deeparg_LS"] <- "LS"
 heatmap_table[heatmap_table == "van_deeparg_SR_unique"] <- "SR"
+heatmap_table[heatmap_table == "van_resfinder_as"] <- "assembly"
+heatmap_table[heatmap_table == "van_resfinder_re"] <- "reads"
 
 heatmap_table$Tool <- ifelse(heatmap_table$ToolDB == "van_rgi", "rgi",
-                             ifelse(heatmap_table$ToolDB == "LS" | heatmap_table$ToolDB == "SR", "deeparg",
+                             ifelse(heatmap_table$ToolDB == "assembly" | heatmap_table$ToolDB == "reads", "resfinder",
+                                ifelse(heatmap_table$ToolDB == "LS" | heatmap_table$ToolDB == "SR", "deeparg",
                                   ifelse(heatmap_table$ToolDB == "basic" | heatmap_table$ToolDB == "ext", "sraX",
-                                        ifelse(heatmap_table$ToolDB == "nuc" | heatmap_table$ToolDB == "prot", "amrfinder", "abricate"))))
+                                      ifelse(heatmap_table$ToolDB == "nuc" | heatmap_table$ToolDB == "prot", "amrfinder", "abricate")))))
 
 heatmap_table[heatmap_table == "van_rgi"] <- "card"
 
@@ -216,14 +242,34 @@ colors <- c("darkgreen", "green", "orange", "red")
 EF_heatmap <- ggplot(data = heatmap_table, mapping = aes(x = ToolDB,
                                                        y = Sample_id,
                                                        fill = Concordance)) +
-  geom_tile(colour="white", size=0.4) +
+  geom_tile(colour="white", size=0.5) +
   scale_fill_manual(values = colors, labels = c("R/R", "S/S", "S/R", "R/S")) +
   labs(x = "", y = "") +
   labs(fill = "Phenotype/Genotype") +
+  theme(axis.text.y = element_text(size = 6)) +
   #coord_fixed(ratio = 0.18) +
 
   facet_grid(~ Tool, scales = "free_x", space = "free_x")
   
 EF_heatmap
 
+
+test_genes <- abr_ncbi[, c(1,6)]
+gen_ord <- c('vanA', 'vanH-A', 'vanR-A', 'vanS-A', 'vanX-A', 'vanY-A', 'vanZ-A', 'vanB', 'vanH-B', 'vanR-B', 'vanS-B', 'vanW-B', 'vanX-B', 'vanY-B')
+for(i in gen_ord) {
+  test_genes$V3[test_genes$V6 == i] <- which(gen_ord == i)
+}
+
+gene_order <- factor(test_genes$V6, level = c('vanA', 'vanH-A', 'vanR-A', 'vanS-A', 'vanX-A', 'vanY-A', 'vanZ-A', 'vanB', 'vanH-B', 'vanR-B', 'vanS-B', 'vanW-B', 'vanX-B', 'vanY-B'))
+
+colors2 <- c("blue4", "red2", "red", "orangered", "sienna1", "darkorange", "blue3", "blue1", "dodgerblue2", "dodgerblue", "deepskyblue2", "deepskyblue", "red4", "red3")
+test_genes_heatmap <- ggplot(data = test_genes, mapping = aes(x = gene_order,
+                                                              y = V1,
+                                                              fill = V3)) +
+  geom_tile(colour="white", size=1) +
+  labs(x = "", y = "") +
+  scale_fill_manual(values = colors2) +
+  theme(legend.position = 'none', axis.text.y = element_text(size = 6)) + 
+  ggtitle("Abricate - NCBI")
+test_genes_heatmap
 
