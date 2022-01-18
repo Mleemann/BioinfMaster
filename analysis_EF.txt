@@ -11,6 +11,7 @@ while read -r file; do  grep -i van $file/deeparg_SR/*.deeparg.mapping*.ARG >> v
 while read -r file; do grep -i van */resistance/abricate/"$file"_abricate_argannot.tab >> van_abricate_argannot.tab; done < samples_EF.txt
 sort van_abricate_argannot.tab > van_abricate_argannot_sorted.tab 
 
+# add sample id to resfinder reads output
 while read -r file; do sed -i "s/$/\t$file/" */resistance/resfinder_reads/"$file"_resfinder_reads/ResFinder_results_tab.txt; done < samples_EF.txt
 
 # run phenotypes.R script to get the phenotype/mic table for vancomycin
