@@ -4,10 +4,13 @@ while read -r file; do awk FNR-1 */resistance/amrfinder_nuc/"$file"_amrfinder_nu
 while read -r file; do awk FNR-1 */resistance/amrfinder_prot/"$file"_amrfinder_prot.tsv >> amrfinder_prot.tab; done < samples_SA.txt
 
 while read -r file; do awk FNR-1 */resistance/deeparg_LS/"$file"_deeparg_LS.tsv.mapping*.ARG >> deeparg_LS.tab; done < samples_SA.txt 
-while read -r file; do awk FNR-1 */resistance/deeparg_SR/"$file"_deeparg_SR.tsv.clean.deeparg.mapping*.ARG >> deeparg_SR.tab; done < samples_SA.txt 
+
+# use grep to include from which file the entries are
+while read -r file; do grep -v "#" */resistance/deeparg_SR/"$file"_deeparg_SR.tsv.clean.deeparg.mapping*.ARG >> deeparg_SR.tab; done < samples_SA.txt
 
 while read -r file; do awk FNR-1 */resistance/resfinder_assembly/"$file"_resfinder_assembly/ResFinder_results_tab.txt >> resfinder_assembly.tab; done < samples_SA.txt 
 
+# to add sample_id to each entry
 while read -r file; do sed -i "s/$/\t$file/" */resistance/resfinder_reads/"$file"_resfinder_reads/ResFinder_results_tab.txt; done < samples_SA.txt
 while read -r file; do awk FNR-1 */resistance/resfinder_reads/"$file"_resfinder_reads/ResFinder_results_tab.txt >> resfinder_reads.tab; done < samples_SA.txt 
 
