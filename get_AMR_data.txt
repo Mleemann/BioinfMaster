@@ -1,0 +1,17 @@
+while read -r file; do grep -v "#" */resistance/abricate/"$file"_abricate_ncbi.tab >> abricate_ncbi.tab; done < samples_KP.txt
+
+while read -r file; do awk FNR-1 */resistance/amrfinder_nuc/"$file"_amrfinder_nuc.tsv >> amrfinder_nuc.tab; done < samples_SA.txt 
+while read -r file; do awk FNR-1 */resistance/amrfinder_prot/"$file"_amrfinder_prot.tsv >> amrfinder_prot.tab; done < samples_SA.txt
+
+while read -r file; do awk FNR-1 */resistance/deeparg_LS/"$file"_deeparg_LS.tsv.mapping*.ARG >> deeparg_LS.tab; done < samples_SA.txt 
+while read -r file; do awk FNR-1 */resistance/deeparg_SR/"$file"_deeparg_SR.tsv.clean.deeparg.mapping*.ARG >> deeparg_SR.tab; done < samples_SA.txt 
+
+while read -r file; do awk FNR-1 */resistance/resfinder_assembly/"$file"_resfinder_assembly/ResFinder_results_tab.txt >> resfinder_assembly.tab; done < samples_SA.txt 
+
+while read -r file; do sed -i "s/$/\t$file/" */resistance/resfinder_reads/"$file"_resfinder_reads/ResFinder_results_tab.txt; done < samples_SA.txt
+while read -r file; do awk FNR-1 */resistance/resfinder_reads/"$file"_resfinder_reads/ResFinder_results_tab.txt >> resfinder_reads.tab; done < samples_SA.txt 
+
+while read -r file; do cat */resistance/rgi/"$file"_rgi_resistance.tab.txt | cut -f2,9,10,11,12,14,15,16,17 >> rgi.tab; done < samples_SA.txt 
+
+while read -r file; do awk FNR-1 */resistance/sraX_basic/"$file"_sraX_basic/Results/Summary_files/sraX_gene_coordinates.tsv >> srax_basic.tab; done < samples_SA.txt 
+while read -r file; do awk FNR-1 */resistance/sraX_ext/"$file"_sraX_ext/Results/Summary_files/sraX_gene_coordinates.tsv >> srax_ext.tab; done < samples_SA.txt 

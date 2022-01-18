@@ -1,1 +1,0 @@
-while read -r file; do grep -v "#" */resistance/abricate/"$file"_abricate_ncbi.tab >> abricate_ncbi.tab; done < samples_KP.txt
