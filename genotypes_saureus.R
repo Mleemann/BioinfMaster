@@ -368,10 +368,6 @@ for(i in 1:length(genes_abr_ncbi[,1])) {
   genes_abr_ncbi[i,4] <- pheno_mic[which(genes_abr_ncbi[i,1] == pheno_mic$Sample_id), 2]
 }
 
-#gen_ord <- c('vanA', 'vanH-A', 'vanR-A', 'vanS-A', 'vanX-A', 'vanY-A', 'vanZ-A', 'vanB', 'vanH-B', 'vanR-B', 'vanS-B', 'vanW-B', 'vanX-B', 'vanY-B')
-#for(i in gen_ord) {
-#  van_genes$V3[van_genes$V6 == i] <- which(gen_ord == i)
-#}
 genes_abr_ncbi <- genes_abr_ncbi[-c(which(is.na(genes_abr_ncbi$V6))), ]
 genes_abr_ncbi$V3 <- as.character(genes_abr_ncbi$V3)
 
