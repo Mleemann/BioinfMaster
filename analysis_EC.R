@@ -265,12 +265,12 @@ srax_ext_bla <- srax_ext[c(grep("beta-lactamase", srax_ext$Gene_description, ign
 names(srax_ext_bla)[6] <- 'bla_genes'
 srax_ext_bla$Tool <- 'srax_ext'
 
-# collect everything in one table
+# collect all genes found in each tool in one table
 bla <- rbind(ncbi_bla[,c(1,6,16)], card_bla[,c(1,6,16)], megares_bla[,c(1,6,16)], resfinder_bla[,c(1,14,16)], argannot_bla[,c(1,6,16)],
               amrf_nuc_bla[,c(1,6,23)], amrf_prot_bla[,c(1,2,19)], deeparg_LS_bla[,c(4,6,13)], deeparg_SR_bla[,c(1,6,13)],
               resfinder_as_bla[,c(6,1,10)], resfinder_re_bla[,c(10,1,11)], rgi_bla[,c(1,2,10)], srax_basic_bla[,c(2,6,17)], srax_ext_bla[,c(2,6,17)])
 
-# include species type
+# include clinical phenotype 
 for (i in 1:length(bla$Sample_id)){
   bla$Type[i] <- phenotypes$LGM_BK[grep(bla$Sample_id[i], phenotypes$Sample_id)]
   }
@@ -278,7 +278,7 @@ for (i in 1:length(bla$Sample_id)){
 bla <- unique(bla)
 
 #-------------------------------------------------------------------------------
-# plot phenotypes
+# plot phenotypes of all antibiotics
 phenotypes_filtered <- phenotypes
 phenotypes_filtered$Dummy <- NULL
 phenotypes_filtered[phenotypes_filtered == "NULL" | phenotypes_filtered == "U"] <- 0
@@ -302,7 +302,7 @@ phenotypes_filtered[phenotypes_filtered == "c(I, S)" | phenotypes_filtered == "c
 
 phenotypes_filtered[phenotypes_filtered == "c(U, U)" | phenotypes_filtered == "c(U, U, U)"] <- 0
 
-
+# combine antibiotics with several columns
 phenotypes_filtered$Meropenem[phenotypes_filtered$Meropenem.bei.Meningitis  == "S"] <- "S"
 phenotypes_filtered$Meropenem[phenotypes_filtered$Meropenem.bei.Meningitis  == "R"] <- "R"
 phenotypes_filtered$Meropenem[phenotypes_filtered$Meropenem.bei.Meningitis  == "I"] <- "I"
@@ -353,6 +353,7 @@ bla_for_heatmap[bla_for_heatmap == "KPC-1" | bla_for_heatmap == "KPC-2"] <- "KPC
 bla_for_heatmap$Occurance <- 1
 bla_for_heatmap$Occurance <- as.character(bla_for_heatmap$Occurance)
 
+# classification of the found bla genes
 carba <- read.table('carba.txt')
 esbl <- read.table('esbl.txt')
 ampc <- read.table('ampc.txt')
@@ -376,7 +377,7 @@ bla_heatmap <- ggplot(data = bla_for_heatmap, mapping = aes(x = bla_genes,
 
 bla_heatmap
 
-
+# show how many tools have found each gene
 for (i in 1:length(bla_for_heatmap$Sample_id)) { 
   j <- bla_for_heatmap$bla_genes[i]
   bla_for_heatmap$Occurance[i] <- length(which(bla_for_heatmap$Sample_id == bla_for_heatmap$Sample_id[i] & bla_for_heatmap$bla_genes == j))
@@ -396,6 +397,7 @@ bla_heatmap2 <- ggplot(data = bla_for_heatmap[1:3000,], mapping = aes(x = bla_ge
 bla_heatmap2
 
 
+# test abricate tools
 abricate_bla <- bla_for_heatmap[grep('abr', bla_for_heatmap$Tool),]
 abricate_bla <- abricate_bla[-c(grep('ncbi', abricate_bla$Tool)),]
 
