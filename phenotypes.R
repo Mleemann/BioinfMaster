@@ -20,12 +20,12 @@ all_metadata$LSM_BK <- paste0(all_metadata$LSM_BK, '-',all_metadata$LSM_SAMPLE_E
 names(all_metadata)[2] <- c('Sample_id')
 
 # get LSM_BK, Antibiotic, Result
-ab_results <- all_metadata[,c(2,29,30)]
-mic <- all_metadata[,c(2,29,35,36)]
+ab_results <- all_metadata[,c(2,19,29,30)]
+mic <- all_metadata[,c(2,19,29,35,36)]
 
 # combine prefix and value of mic
 mic$LARM_MIC <- paste0(mic$LARM_MIC_PREFIX, ' ', mic$LARM_MIC)
-mic <- mic[ ,c(1,2,4)]
+mic <- mic[ ,c(1,2,3,5)]
 
 # remove rows with empty fields
 ab_results <- ab_results[!(ab_results$LARM_ANTIBIOTIC == ''), ]
@@ -40,26 +40,32 @@ samples_to_analyze <- read.table("samples_EF.txt")
 
 # subset phenotype dataframe with the samples to be analyzed
 phenotypes <- all_phenotypes[all_phenotypes$Sample_id %in% samples_to_analyze$V1, ]
+phenotypes <- phenotypes[-c(38),]
 mic_data <- all_mic[all_mic$Sample_id %in% samples_to_analyze$V1, ]
+names(mic_data)[1] <- c('Sample_id')
+mic_data <- mic_data[-c(38),]
+
+pheno_mic <- merge(phenotypes, mic_data, by.x = 'Sample_id', by.y = 'Sample_id')
 
 # create phenotype and mic table for only Vancomycin
-vanco_pheno <- phenotypes[,c(1,31)]
-vanco_mic <- mic_data[,c(1,31)]
-names(vanco_mic)[2] <- c('MIC-Vancomycin')
+vanco_pheno <- phenotypes[,c(1,2,31)]
+vanco_mic <- mic_data[,c(1,2,31)]
+names(vanco_mic)[3] <- c('MIC-Vancomycin')
 
 pheno_mic <- merge(vanco_pheno, vanco_mic, by.x = 'Sample_id')
 
 # save phenotype and mic table
 pheno_mic <- apply(pheno_mic,2,as.character)
-write.csv2(pheno_mic, file = 'phenotypes_vanco_EF.csv', row.names = F, quote = F)
+write.csv2(pheno_mic, file = 'pheno_mic_EF.csv', row.names = F, quote = F)
+phenotypes <- apply(phenotypes,2,as.character)
+write.csv2(phenotypes, file = 'phenotypes_EF.csv', row.names = F, quote = F)
+mic_data <- apply(mic_data,2,as.character)
+write.csv2(mic_data, file = 'mic_EF.csv', row.names = F, quote = F)
 
 
 # save phenotype and mic table
-#phenotypes <- apply(phenotypes,2,as.character)
-#write.csv2(phenotypes, file = 'phenotypes_EF.csv', row.names = F, quote = F)
-
-#mic_data <- apply(mic_data,2,as.character)
-#write.csv2(mic_data, file = 'mic_EF.csv', row.names = F, quote = F)
+pheno_mic <- apply(pheno_mic,2,as.character)
+write.csv2(pheno_mic, file = 'phenotypes_vanco_EF.csv', row.names = F, quote = F)
 
 
 #-------------------------------------------------------------------------------
