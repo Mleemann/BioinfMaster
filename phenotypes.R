@@ -48,11 +48,11 @@ mic_data <- mic_data[-c(38),]
 pheno_mic <- merge(phenotypes, mic_data, by.x = 'Sample_id', by.y = 'Sample_id')
 
 # create phenotype and mic table for only Vancomycin
-vanco_pheno <- phenotypes[,c(1,2,31)]
-vanco_mic <- mic_data[,c(1,2,31)]
+vanco_pheno <- phenotypes[,c(1,2,32)]
+vanco_mic <- mic_data[,c(1,2,32)]
 names(vanco_mic)[3] <- c('MIC-Vancomycin')
 
-pheno_mic <- merge(vanco_pheno, vanco_mic, by.x = 'Sample_id')
+pheno_mic <- merge(vanco_pheno, vanco_mic[,c(1,3)], by.x = 'Sample_id', by.y = 'Sample_id')
 
 # save phenotype and mic table
 pheno_mic <- apply(pheno_mic,2,as.character)
@@ -67,6 +67,18 @@ write.csv2(mic_data, file = 'mic_EF.csv', row.names = F, quote = F)
 pheno_mic <- apply(pheno_mic,2,as.character)
 write.csv2(pheno_mic, file = 'phenotypes_vanco_EF.csv', row.names = F, quote = F)
 
+
+# create phenotype and mic table for Vancomycin and Teicoplanin
+van_tei_pheno <- phenotypes[,c(1,2,32,23)]
+van_tei_mic <- mic_data[,c(1,2,32,23)]
+names(van_tei_mic)[3] <- c('MIC-Vancomycin')
+names(van_tei_mic)[4] <- c('MIC-Teicoplanin')
+
+pheno_mic_van_tei <- merge(van_tei_pheno, van_tei_mic[,c(1,3,4)], by.x = 'Sample_id', by.y = 'Sample_id')
+
+# save phenotype and mic table
+pheno_mic_van_tei <- apply(pheno_mic_van_tei,2,as.character)
+write.csv2(pheno_mic_van_tei, file = 'phenotypes_van_tei_EF.csv', row.names = F, quote = F)
 
 #-------------------------------------------------------------------------------
 # S. aureus
@@ -107,11 +119,12 @@ samples_to_analyze <- read.table("samples_SA.txt")
 
 # subset phenotype dataframe with the samples to be analyzed
 phenotypes <- all_phenotypes[all_phenotypes$Sample_id %in% samples_to_analyze$V1, ]
-phenotypes <- phenotypes[-c(182),]
+which(duplicated(phenotypes$Sample_id))
+phenotypes <- phenotypes[-c(179),]
 mic_data <- all_mic[all_mic$Sample_id %in% samples_to_analyze$V1, ]
 colnames(mic_data) <- paste("MIC", colnames(mic_data), sep = "-")
 names(mic_data)[1] <- c('Sample_id')
-mic_data <- mic_data[-c(182),]
+mic_data <- mic_data[-c(179),]
 
 pheno_mic <- merge(phenotypes, mic_data, by.x = 'Sample_id', by.y = 'Sample_id')
 
@@ -166,9 +179,9 @@ mic_data <- all_mic[all_mic$Sample_id %in% samples_to_analyze$V1, ]
 colnames(mic_data) <- paste("MIC", colnames(mic_data), sep = "-")
 names(mic_data)[1] <- c('Sample_id')
 
-# remove samples with 2 phenotypes: 502933-18 esccol, 806847-19 esccolc, 802728-21 esccole
-phenotypes <- phenotypes[-c(94, 238, 268),]
-mic_data <- mic_data[-c(94, 238, 268),]
+# remove samples with 2 phenotypes: 502933-18 esccol, 806847-19 esccole, 802728-21 esccole
+phenotypes <- phenotypes[-c(88, 218, 245),]
+mic_data <- mic_data[-c(88, 218, 245),]
 
 pheno_mic <- merge(phenotypes, mic_data, by.x = 'Sample_id', by.y = 'Sample_id')
 
@@ -223,8 +236,8 @@ colnames(mic_data) <- paste("MIC", colnames(mic_data), sep = "-")
 names(mic_data)[1] <- c('Sample_id')
 
 # remove samples with 2 phenotypes
-phenotypes <- phenotypes[-c(181, 212),]
-mic_data <- mic_data[-c(81, 212),]
+phenotypes <- phenotypes[-c(168, 199),]
+mic_data <- mic_data[-c(168, 199),]
 
 pheno_mic <- merge(phenotypes, mic_data, by.x = 'Sample_id', by.y = 'Sample_id')
 
