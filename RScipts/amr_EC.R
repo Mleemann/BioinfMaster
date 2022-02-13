@@ -832,7 +832,7 @@ concordance_heatmap
 ### esccolc
 heatmap_concordance_esccolc <- heatmap_concordance[c(which(heatmap_concordance$Type == "esccolc")),]
 colors_c <- c("darkgreen", "red2", "red4")
-label_c <- c("Carba/Carba", "Carba/ESBL", "Carba/none")
+label_c <- c("Carbapenemase/Carbapenemase", "Carbapenemase/ESBL", "Carbapenemase/none")
 
 heatmap_concordance_esccolc$Sample_id <- factor(heatmap_concordance_esccolc$Sample_id, levels = c(a, b, c, d, e, f, g)) 
 
@@ -842,7 +842,7 @@ concordance_heatmap_esccolc <- ggplot(data = heatmap_concordance_esccolc, mappin
   geom_tile(colour="white", size=0.5) +
   scale_fill_manual(values = colors_c, labels = label_c) +
   labs(x = "", y = "") +
-  labs(fill = "Phenotype/Genotype") +
+  labs(fill = "Reported/Genotype") +
   theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
   facet_grid(vars(factor(heatmap_concordance_esccolc$MeropenemMIC, levels = c("<= 0.5", "= 0.75","<= 1", "= 2",
@@ -854,7 +854,7 @@ concordance_heatmap_esccolc
 ### esccole
 heatmap_concordance_esccole <- heatmap_concordance[c(which(heatmap_concordance$Type == "esccole")),]
 colors_e <- c("gold", "green3", "orangered")
-label_e <- c("ESBL/Carba", "ESBL/ESBL", "ESBL/none")
+label_e <- c("ESBL/Carbapenemase", "ESBL/ESBL", "ESBL/none")
 
 heatmap_concordance_esccole$Sample_id <- factor(heatmap_concordance_esccole$Sample_id, levels = c(h,i,j,k,l,m,n,o,p))
 
@@ -864,7 +864,7 @@ concordance_heatmap_esccole <- ggplot(data = heatmap_concordance_esccole, mappin
   geom_tile(colour="white", size=0.5) +
   scale_fill_manual(values = colors_e, labels = label_e) +
   labs(x = "", y = "") +
-  labs(fill = "Phenotype/Genotype") +
+  labs(fill = "Reported/Genotype") +
   theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
   facet_grid(vars(factor(heatmap_concordance_esccole$CeftriaxonMIC, levels = c("<= 1", "= 4", "= 8", ">= 16", ">= 32", ">= 64", "none","NA"))), vars(Tool), scales = "free", space = "free")
@@ -878,7 +878,7 @@ heatmap_concordance_esccol <- heatmap_concordance[c(which(heatmap_concordance$Ty
 heatmap_concordance_esccol$Sample_id <- factor(heatmap_concordance_esccol$Sample_id, levels = c(q,r,s,t,u))
 
 colors_n <- c("yellow", "goldenrod1", "green")
-label_n <- c("none/Carba", "none/ESBL", "none/none")
+label_n <- c("none/Carbapenemase", "none/ESBL", "none/none")
 
 concordance_heatmap_esccol <- ggplot(data = heatmap_concordance_esccol, mapping = aes(x = ToolDB,
                                                                                       y = Sample_id,
@@ -886,7 +886,7 @@ concordance_heatmap_esccol <- ggplot(data = heatmap_concordance_esccol, mapping 
   geom_tile(colour="white", size=0.5) +
   scale_fill_manual(values = colors_n, labels = label_n) +
   labs(x = "", y = "") +
-  labs(fill = "Phenotype/Genotype") +
+  labs(fill = "Reported/Genotype") +
   theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
   facet_grid(vars(factor(cluster_esccol$CeftriaxonMIC, levels = c("<= 1", "= 2","= 4", "= 8", ">= 16", ">= 32", ">= 64", "none","NA"))), vars(Tool), scales = "free", space = "free")
