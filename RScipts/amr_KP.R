@@ -62,6 +62,28 @@ pheno_mic$Sample_id[138] <- "804158-2-17"
 pheno_mic$Sample_id[191] <- "807949-2-17"
 pheno_mic$Sample_id[202] <- "808716-18-17"
 
+# combine antibiotics with several columns
+pheno_mic$Meropenem[pheno_mic$Meropenem.ohne.Meningitis  == "S"] <- "S"
+pheno_mic$Meropenem[pheno_mic$Meropenem.ohne.Meningitis  == "R"] <- "R"
+pheno_mic$Meropenem[pheno_mic$Meropenem.ohne.Meningitis  == "I"] <- "I"
+
+pheno_mic$Ceftriaxon[pheno_mic$Ceftriaxon.ohne.Meningitis  == "S"] <- "S"
+pheno_mic$Ceftriaxon[pheno_mic$Ceftriaxon.ohne.Meningitis  == "R"] <- "R"
+pheno_mic$Ceftriaxon[pheno_mic$Ceftriaxon.ohne.Meningitis  == "I"] <- "I"
+
+for (i in 1:length(pheno_mic$Sample_id)){
+  if(pheno_mic$MIC.Meropenem[i] == "NULL") {
+    pheno_mic$MIC.Meropenem[i] <- pheno_mic$MIC.Meropenem.ohne.Meningitis[i]
+  }
+}
+
+for (i in 1:length(pheno_mic$Sample_id)){
+  if(pheno_mic$MIC.Ceftriaxon.ohne.Meningitis[i] != "NULL") {
+    pheno_mic$MIC.Ceftriaxon[i] <- pheno_mic$MIC.Ceftriaxon.ohne.Meningitis[i]
+  }
+}
+
+
 #unique(as.vector(as.matrix(pheno_mic)))
 pheno_mic[pheno_mic == "c(R, R)" | pheno_mic == "c(S, R)" | pheno_mic == "c(R, S)" | pheno_mic == "c(S, U, R)" |   
             pheno_mic == "c(R, S, S)" | pheno_mic == "c(R, R, R)" | pheno_mic == "c(R, U)" | pheno_mic == "c(R, R, U)" |
@@ -82,28 +104,15 @@ pheno_mic[pheno_mic == "c(I, S)" | pheno_mic == "c(S, I)" | pheno_mic == "c(I, S
 pheno_mic[pheno_mic == "U" | pheno_mic == "c(U, U)" | pheno_mic == "c(U, U, U)"] <- 0
 
 
-# combine antibiotics with several columns
-pheno_mic$Meropenem[pheno_mic$Meropenem.bei.Meningitis  == "S"] <- "S"
-pheno_mic$Meropenem[pheno_mic$Meropenem.bei.Meningitis  == "R"] <- "R"
-pheno_mic$Meropenem[pheno_mic$Meropenem.bei.Meningitis  == "I"] <- "I"
 
-pheno_mic$Ceftriaxon[pheno_mic$Ceftriaxon.bei.Meningitis  == "S"] <- "S"
-pheno_mic$Ceftriaxon[pheno_mic$Ceftriaxon.bei.Meningitis  == "R"] <- "R"
-pheno_mic$Ceftriaxon[pheno_mic$Ceftriaxon.bei.Meningitis  == "I"] <- "I"
 
-for (i in 1:length(pheno_mic$Sample_id)){
-  if(pheno_mic$MIC.Meropenem[i] == "NULL") {
-    pheno_mic$MIC.Meropenem[i] <- pheno_mic$MIC.Meropenem.ohne.Meningitis[i]
-  }
-}
-
-pheno_mic[pheno_mic == "c(n.a. 0, = 0)" | pheno_mic == "n.a. 0" | pheno_mic == "c(n.a. 0, n.a. 0)"] <- "NA" 
+pheno_mic[pheno_mic == "c(n.a. 0, = 0)" | pheno_mic == "n.a. 0" | pheno_mic == "c(n.a. 0, n.a. 0)" | pheno_mic == "= 0"] <- "NA" 
 pheno_mic[pheno_mic == "c(= 0.016, n.a. 0)"] <- "= 0.016"
 pheno_mic[pheno_mic == "c(<= 0.25, <= 0.25)" | pheno_mic == "c(= 0.047, <= 0.25)" | pheno_mic == "c(<= 0.25, <= 0.25, <= 0.25)"] <-  "<= 0.25"
 pheno_mic[pheno_mic == "c(<= 0.5, <= 0.5)" | pheno_mic == "c(= 0.38, = 0.5)" | pheno_mic == "c(= 0, = 0.5)" | 
             pheno_mic == "c(<= 0.5, <= 0.5, <= 0.5)" | pheno_mic == "c(= 0.75, <= 0.5)" | pheno_mic == "c(= 0.5, = 0.19)" | pheno_mic == "= 0.5"] <-  "<= 0.5"
 pheno_mic[pheno_mic == "c(= 0, = 0.75)"] <- "= 0.75"
-pheno_mic[pheno_mic == "c(n.a. 0, <= 1)" | pheno_mic == "= 0" | pheno_mic == "c(<= 1, < 0.5)" | pheno_mic == "c(<= 1, = 1)" | 
+pheno_mic[pheno_mic == "c(n.a. 0, <= 1)" | pheno_mic == "c(<= 1, < 0.5)" | pheno_mic == "c(<= 1, = 1)" | 
             pheno_mic == "c(= 0, <= 1)" | pheno_mic == "c(<= 1, <= 1)" | pheno_mic == "c(= 1.5, <= 1)" | pheno_mic == "c(<= 1, = 6)" |
             pheno_mic == "c(<= 1, = 0, = 0, <= 1)" | pheno_mic == "c(<= 1, = 0)" | pheno_mic == "c(<= 1, <= 1, = 0)" |
             pheno_mic == "c(n.a. 0, = 1, = 1)" | pheno_mic == "c(= 0.5, = 1)" | pheno_mic == "c(= 0.5, <= 1)" | pheno_mic == "c(>= 8, = 1)" |
@@ -131,12 +140,6 @@ pheno_mic[pheno_mic == "c(> 32, >= 64)" | pheno_mic == "c(>= 64, > 32)" | pheno_
             pheno_mic == "c(>= 64, n.a. 0)" | pheno_mic == "c(n.a. 0, >= 64)" | pheno_mic == "c(= 0, >= 64)" |
             pheno_mic == "c(>= 64, = 0, n.a. 0, = 2)" | pheno_mic == "c(>= 64, = 0, n.a. 0, = 2, = 2)" | pheno_mic == "c(>= 64, = 0)"] <- ">= 64" 
 
-
-for (i in 1:length(pheno_mic$Sample_id)){
-  if(pheno_mic$MIC.Ceftriaxon[i] == "NA") {
-    pheno_mic$MIC.Ceftriaxon[i] <- pheno_mic$MIC.Ceftriaxon.ohne.Meningitis[i]
-  }
-}
 
 #-------------------------------------------------------------------------------
 # get result tables
@@ -549,7 +552,7 @@ for (i in 1:length(cluster_klepnee$Sample_id)) {
 
 
 # order legend
-cluster_klepnee$cluster_rep <- factor(cluster_klepnee$cluster_rep, levels = c(4,1,2,3,8,6,11,5,12,7,9,10)) 
+cluster_klepnee$cluster_rep <- factor(cluster_klepnee$cluster_rep, levels = c(4,2,3,1,8,6,5,11,12,7,9,10)) 
 
 j <- sort(unique(cluster_klepnee$Sample_id[cluster_klepnee$ToolDB == "argannot" & cluster_klepnee$cluster_rep == "4"]))
 k <- sort(unique(cluster_klepnee$Sample_id[cluster_klepnee$ToolDB == "argannot" & (cluster_klepnee$cluster_rep == "2")]))
@@ -561,20 +564,20 @@ p <- sort(unique(cluster_klepnee$Sample_id[cluster_klepnee$ToolDB == "argannot" 
 
 cluster_klepnee$Sample_id <- factor(cluster_klepnee$Sample_id, levels = c(j,k,l,m,n,o,p))
 
-colors <- c( "blue4", "gold", "dodgerblue3", "deepskyblue2", "cyan2", "orangered", "seagreen4", "orange", "maroon", "magenta", "yellowgreen","moccasin")
+colors <- c( "blue4", "blue", "cyan2", "gold", "seagreen2", "orangered", "orange", "seagreen4", "maroon", "magenta", "yellowgreen","moccasin")
 
 cluster_klepnee_heatmap <- ggplot(data = cluster_klepnee, mapping = aes(x = ToolDB,
                                                                         y = Sample_id,
                                                                         fill = cluster_rep)) +
   geom_tile(colour="white", size=0.5) +
-  scale_fill_manual(values = colors, labels = c("CTX-M-1 Group", "CTX-M-1 Group & SHV Carbapenemase type", "CTX-M-1 Group & SHV ESBL type",
-                                                "CTX-M-1 Group & TEM ESBL type", "CTX-M-8 Group", "CTX-M-9 Group", "CTX-M-9 Group & OXA-48",
-                                                "CTX-M-9 Group & SHV ESBL type", "CTX-M", "SHV ESBL type", "mixed", "none")) +
+  scale_fill_manual(values = colors, labels = c("CTX-M-1 Group", "CTX-M-1 Group & SHV ESBL type", "CTX-M-1 Group & TEM ESBL type", 
+                                                "CTX-M-1 Group & SHV Carbapenemase type", "CTX-M-8 Group", "CTX-M-9 Group", "CTX-M-9 Group & SHV ESBL type",
+                                                "CTX-M-9 Group & OXA-48", "CTX-M", "SHV ESBL type", "mixed", "none")) +
   labs(x = "", y = "") +
   labs(fill = "ESBL genes") +
   theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
-  facet_grid(vars(factor(cluster_klepnee$CeftriaxonMIC, levels = c("<= 1", "= 8", ">= 16", ">= 32", ">= 64"))), vars(Tool), scales = "free", space = "free")
+  facet_grid(vars(factor(cluster_klepnee$CeftriaxonMIC, levels = c("<= 1", "= 8", ">= 16", ">= 32", ">= 64", "NA"))), vars(Tool), scales = "free", space = "free")
 
 cluster_klepnee_heatmap
 
@@ -613,7 +616,7 @@ cluster_klepne_heatmap <- ggplot(data = cluster_klepne, mapping = aes(x = ToolDB
   labs(fill = "ESBL/Carbapenemase genes") +
   theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
-  facet_grid(vars(factor(cluster_klepne$CeftriaxonMIC, levels = c("<= 1", "= 3","= 4", "= 8", ">= 16"))), vars(Tool), scales = "free", space = "free")
+  facet_grid(vars(factor(cluster_klepne$CeftriaxonMIC, levels = c("<= 1", "= 4", "= 8", ">= 16"))), vars(Tool), scales = "free", space = "free")
 
 cluster_klepne_heatmap
 
@@ -852,7 +855,7 @@ concordance_heatmap_klepnee <- ggplot(data = heatmap_concordance_klepnee, mappin
   labs(fill = "Reported/Genotype") +
   theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
-  facet_grid(vars(factor(heatmap_concordance_klepnee$CeftriaxonMIC, levels = c("<= 1", "= 8", ">= 16", ">= 32", ">= 64"))), vars(Tool), scales = "free", space = "free")
+  facet_grid(vars(factor(heatmap_concordance_klepnee$CeftriaxonMIC, levels = c("= 8", ">= 16", ">= 32", ">= 64", "NA"))), vars(Tool), scales = "free", space = "free")
 
 concordance_heatmap_klepnee
 
@@ -874,7 +877,7 @@ concordance_heatmap_klepne <- ggplot(data = heatmap_concordance_klepne, mapping 
   labs(fill = "Reported/Genotype") +
   theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
-  facet_grid(vars(factor(cluster_klepne$CeftriaxonMIC, levels = c("<= 1", "= 3","= 4", "= 8", ">= 16"))), vars(Tool), scales = "free", space = "free")
+  facet_grid(vars(factor(cluster_klepne$CeftriaxonMIC, levels = c("<= 1", "= 4", "= 8", ">= 16"))), vars(Tool), scales = "free", space = "free")
 
 concordance_heatmap_klepne
 
@@ -887,6 +890,7 @@ concordance_heatmap_klepne
 
 mero_imi <- pheno_mic[,c(1,2,5,29,40,112,136,147)]
 mero_imi <- mero_imi[c(which(mero_imi$LGM_BK == "klepnec")),]
+mero_imi[mero_imi == "NULL"] <- "I"
 
 mero_imi_table <- pivot_longer(data = mero_imi, 
                                cols = -c(1:2,6:8),
@@ -897,7 +901,7 @@ mero_imi_table <- pivot_longer(data = mero_imi,
 mero_imi_table$Sample_id <- factor(mero_imi_table$Sample_id, levels = c(a,b,c,d,e,f,g,h))
 
 colors <- c("gray", "lemonchiffon", "black", "red")
-mero_imi_table$Phenotype <- factor(mero_imi_table$Phenotype, levels = c("S", "I", "R", "0")) 
+mero_imi_table$Phenotype <- factor(mero_imi_table$Phenotype, levels = c("S", "I", "R", "NA")) 
 
 mero_imi_heatmap <- ggplot(data = mero_imi_table, mapping = aes(x = Antibiotic,
                                                                 y = Sample_id,
@@ -981,7 +985,7 @@ hm_cephalo_table <- ggplot(data = cephalo_table, mapping = aes(x = Antibiotic,
   labs(fill = "Phenotype") +
   theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
-  facet_grid(vars(factor(cephalo_table$MIC.Ceftriaxon, levels = c("<= 1", "= 8", ">= 16", ">= 32", ">= 64"))), scales = "free", space = "free")
+  facet_grid(vars(factor(cephalo_table$MIC.Ceftriaxon, levels = c("= 8", ">= 16", ">= 32", ">= 64", "NA"))), scales = "free", space = "free")
 
 hm_cephalo_table
 
