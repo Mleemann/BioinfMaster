@@ -77,6 +77,13 @@ mic$MIC.LGM_BK[7] <- "esccole"
 which(pheno_mic$Sample_id == "700109-6-13")
 pheno_mic$LGM_BK[61] <- "esccole"
 
+pheno_mic$Meropenem[which(pheno_mic$Sample_id == "701215-7-19")] <- "S"
+pheno_mic$MIC.Meropenem[which(pheno_mic$Sample_id == "701215-7-19")] <- "<= 0.25"
+
+pheno_mic$Meropenem[which(pheno_mic$Sample_id == "806291-19")] <- "S"
+pheno_mic$MIC.Meropenem[which(pheno_mic$Sample_id == "806291-19")] <- "<= 0.25"
+
+
 # combine antibiotics with several columns
 pheno_mic$Meropenem[pheno_mic$Meropenem.ohne.Meningitis  == "S"] <- "S"
 pheno_mic$Meropenem[pheno_mic$Meropenem.ohne.Meningitis  == "R"] <- "R"
@@ -150,7 +157,12 @@ pheno_mic[pheno_mic == "c(> 32, >= 64)" | pheno_mic == "c(>= 64, > 32)" | pheno_
            pheno_mic == "c(>= 64, n.a. 0)" | pheno_mic == "c(n.a. 0, >= 64)" | pheno_mic == "c(= 0, >= 64)" |
            pheno_mic == "c(>= 64, = 0, n.a. 0, = 2)" | pheno_mic == "c(>= 64, = 0, n.a. 0, = 2, = 2)" | pheno_mic == "c(>= 64, = 0)"] <- ">= 64" 
 
-
+names(pheno_mic)[names(pheno_mic) == "Ceftriaxon"] <- "Ceftriaxone"
+names(pheno_mic)[names(pheno_mic) == "MIC.Ceftriaxon"] <- "MIC.Ceftriaxone"
+names(pheno_mic)[names(pheno_mic) == "Cefepim"] <- "Cefepime"
+names(pheno_mic)[names(pheno_mic) == "MIC.Cefepim"] <- "MIC.Cefepime"
+names(pheno_mic)[names(pheno_mic) == "Ceftazidim"] <- "Ceftazidime"
+names(pheno_mic)[names(pheno_mic) == "MIC.Ceftazidim"] <- "MIC.Ceftazidime"
 
 #-------------------------------------------------------------------------------
 # get result tables
@@ -389,15 +401,15 @@ for (i in 1:length(bla$Sample_id)){
 }
   
 for (i in 1:length(bla$Sample_id)){
-  bla$CeftriaxonMIC[i] <- pheno_mic$MIC.Ceftriaxon[which(bla$Sample_id[i] == pheno_mic$Sample_id)]
+  bla$CeftriaxoneMIC[i] <- pheno_mic$MIC.Ceftriaxone[which(bla$Sample_id[i] == pheno_mic$Sample_id)]
 }
   
 for (i in 1:length(bla$Sample_id)){
-  bla$CeftazidimMIC[i] <- pheno_mic$MIC.Ceftazidim[which(bla$Sample_id[i] == pheno_mic$Sample_id)]
+  bla$CeftazidiemMIC[i] <- pheno_mic$MIC.Ceftazidime[which(bla$Sample_id[i] == pheno_mic$Sample_id)]
 }
   
 for (i in 1:length(bla$Sample_id)){
-  bla$CefepimMIC[i] <- pheno_mic$MIC.Cefepim[which(bla$Sample_id[i] == pheno_mic$Sample_id)]
+  bla$CefepimeMIC[i] <- pheno_mic$MIC.Cefepime[which(bla$Sample_id[i] == pheno_mic$Sample_id)]
 }    
   
 
@@ -414,15 +426,15 @@ for (i in 1:length(bla$Sample_id)){
 }
 
 for (i in 1:length(bla$Sample_id)){
-  bla$Ceftriaxon[i] <- pheno_mic$Ceftriaxon[which(bla$Sample_id[i] == pheno_mic$Sample_id)]
+  bla$Ceftriaxone[i] <- pheno_mic$Ceftriaxone[which(bla$Sample_id[i] == pheno_mic$Sample_id)]
 }
 
 for (i in 1:length(bla$Sample_id)){
-  bla$Ceftazidim[i] <- pheno_mic$Ceftazidim[which(bla$Sample_id[i] == pheno_mic$Sample_id)]
+  bla$Ceftazidime[i] <- pheno_mic$Ceftazidime[which(bla$Sample_id[i] == pheno_mic$Sample_id)]
 }
 
 for (i in 1:length(bla$Sample_id)){
-  bla$Cefepim[i] <- pheno_mic$Cefepim[which(bla$Sample_id[i] == pheno_mic$Sample_id)]
+  bla$Cefepime[i] <- pheno_mic$Cefepime[which(bla$Sample_id[i] == pheno_mic$Sample_id)]
 }  
 
 
@@ -490,7 +502,8 @@ cluster_esccolc$cluster_rep <- ifelse(grepl("KPC-1/2",cluster_esccolc$gene_clust
                                                            ifelse(grepl("OXA-48",cluster_esccolc$gene_cluster) == "TRUE", 5,
                                                                   ifelse(grepl("OXA-181",cluster_esccolc$gene_cluster) == "TRUE", 6,
                                                                          ifelse(grepl("OXA-244",cluster_esccolc$gene_cluster) == "TRUE", 7, 
-                                                                                ifelse(grepl("KPC",cluster_esccolc$gene_cluster) == "TRUE", 8, 10))))))))
+                                                                                ifelse(grepl("KPC",cluster_esccolc$gene_cluster) == "TRUE", 8,
+                                                                                       ifelse(grepl("\\bOXA\\b",cluster_esccolc$gene_cluster) == "TRUE", 11, 10)))))))))
 
 for (i in 1:length(cluster_esccolc$Sample_id)) {
   if (cluster_esccolc$ToolDB[i] == "SR") {
@@ -511,8 +524,8 @@ g <- sort(unique(cluster_esccolc$Sample_id[cluster_esccolc$ToolDB == "argannot" 
 cluster_esccolc$Sample_id <- factor(cluster_esccolc$Sample_id, levels = c(a, b, c, d, e, f, g)) 
 
 # order legend
-cluster_esccolc$cluster_rep <- factor(cluster_esccolc$cluster_rep, levels = c(1,8,2,3,4,5,6,7,9,10)) 
-colors <- c( "seagreen3", "seagreen1", "blue4", "blue", "lightsteelblue", "orangered4", "orangered", "orange","yellowgreen", "moccasin")
+cluster_esccolc$cluster_rep <- factor(cluster_esccolc$cluster_rep, levels = c(1,8,2,3,4,5,6,7,11,9,10)) 
+colors <- c( "seagreen3", "seagreen1", "blue4", "blue", "lightsteelblue", "orangered4", "orangered", "orange", "mediumpurple1", "yellowgreen", "moccasin")
 
 cluster_esccolc_heatmap <- ggplot(data = cluster_esccolc, mapping = aes(x = ToolDB,
                                                                         y = Sample_id,
@@ -520,13 +533,13 @@ cluster_esccolc_heatmap <- ggplot(data = cluster_esccolc, mapping = aes(x = Tool
   geom_tile(colour="white", size=0.5) +
   scale_fill_manual(values = colors, labels = c("KPC-1/2", "KPC", "NDM-1", "NDM-5",
                                                 "NDM", "OXA-48", "OXA-181", "OXA-244", 
-                                                "mixed", "none")) +
+                                                "undefined OXA", "mixed", "none")) +
   labs(x = "", y = "") +
   labs(fill = "Carbapenemase genes") +
   theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
-  facet_grid(vars(factor(cluster_esccolc$MeropenemMIC, levels = c("<= 0.5", "= 0.75","<= 1", "= 2",
-                                                                     "= 4", "= 8", ">= 16", "NA"))), vars(Tool), scales = "free", space = "free")
+  facet_grid(vars(factor(cluster_esccolc$MeropenemMIC, levels = c("<= 0.25", "<= 0.5", "= 0.75","<= 1", "= 2",
+                                                                     "= 4", "= 8", ">= 16"))), vars(Tool), scales = "free", space = "free")
 
 cluster_esccolc_heatmap
 
@@ -536,20 +549,22 @@ cluster_esccole <- gene_cluster_table[c(which(gene_cluster_table$Type == "esccol
 
 ctxm1 <- c("\\bCTX-M-1\\b|\\bCTX-M-3\\b|\\bCTX-M-15\\b|\\bCTX-M-55\\b")
 ctxm8 <- c("\\bCTX-M-8\\b")
-ctxm9 <- c("\\bCTX-M-14\\b|\\bCTX-M-24\\b|\\bCTX-M-27\\b|\\bCTX-M-122\\b|\\bCTX-M-125\\b|\\bCTX-M-125\\b")
-tem <- c("\\bTEM-7\\b|\\bTEM-15\\b|\\bTEM-17\\b|\\bTEM-106\\b")
+ctxm9 <- c("\\bCTX-M-14\\b|\\bCTX-M-24\\b|\\bCTX-M-27\\b|\\bCTX-M-122\\b|\\bCTX-M-125\\b|\\bCTX-M-129\\b|\\bCTX-M-174\\b")
+tem <- c("\\bTEM-7\\b|\\bTEM-15\\b|\\bTEM-17\\b|\\bTEM-106\\b|\\bTEM-52B\\b")
 shv <- c("\\bSHV-5\\b|\\bSHV-12\\b|\\bSHV-66\\b|\\bSHV-134\\b")
 cmy <- "\\bCMY-42\\b"
+ampc <- c("\\bCMY-2\\b|\\bCMY-4\\b|\\bCMY-111\\b|\\bCMY-59\\b|\\bCMY-163\\b")
 
 cluster_esccole$cluster_rep <- ifelse(grepl(cmy,cluster_esccole$gene_cluster) == "TRUE" & grepl(ctxm1,cluster_esccole$gene_cluster) == "TRUE" & grepl(ctxm9,cluster_esccole$gene_cluster) == "TRUE", 1,
-                                      ifelse(grepl(ctxm1,cluster_esccole$gene_cluster) == "TRUE" & grepl(ctxm9,cluster_esccole$gene_cluster) == "TRUE", 2,
+                                      ifelse(grepl(ctxm1,cluster_esccole$gene_cluster) == "TRUE" & grepl(ctxm9,cluster_esccole$gene_cluster) == "TRUE" & grepl(ampc,cluster_esccole$gene_cluster) == "TRUE", 2,
                                              ifelse(grepl(ctxm9,cluster_esccole$gene_cluster) == "TRUE" & grepl(tem, cluster_esccole$gene_cluster) == "TRUE", 3,
                                                     ifelse(grepl(ctxm1,cluster_esccole$gene_cluster) == "TRUE", 4,
                                                            ifelse(grepl(ctxm8,cluster_esccole$gene_cluster) == "TRUE", 5,
                                                                   ifelse(grepl(ctxm9,cluster_esccole$gene_cluster) == "TRUE", 6,
                                                                          ifelse(grepl(cmy,cluster_esccole$gene_cluster) == "TRUE", 7,
                                                                                 ifelse(grepl(shv,cluster_esccole$gene_cluster) == "TRUE", 8,
-                                                                                       ifelse(grepl(tem,cluster_esccole$gene_cluster) == "TRUE", 9, 11)))))))))
+                                                                                       ifelse(grepl(tem,cluster_esccole$gene_cluster) == "TRUE", 9,
+                                                                                              ifelse(grepl(ampc,cluster_esccole$gene_cluster) == "TRUE", 12, 11))))))))))
 
 
 cluster_esccole$cluster_rep <- as.character(cluster_esccole$cluster_rep)
@@ -560,9 +575,15 @@ for (i in 1:length(cluster_esccole$Sample_id)) {
   }
 }
 
+for (i in 1:length(cluster_esccole$Sample_id)) {
+  if (cluster_esccole$ToolDB[i] == "megares" & grepl("\\bOXA\\b|\\bSHV\\b|\\bTEM\\b",cluster_esccolc$gene_cluster) == "TRUE") {
+    cluster_esccole$cluster_rep[i] <- 13
+  }
+}
+
 
 # order legend
-cluster_esccole$cluster_rep <- factor(cluster_esccole$cluster_rep, levels = c(4,5,6,1,2,3,7,8,9,10,11)) 
+cluster_esccole$cluster_rep <- factor(cluster_esccole$cluster_rep, levels = c(4,5,6,1,2,3,8,9,7,12,13,10,11)) 
 
 h <- sort(unique(cluster_esccole$Sample_id[cluster_esccole$ToolDB == "argannot" & cluster_esccole$cluster_rep == "4"]))
 z <- sort(unique(cluster_esccole$Sample_id[cluster_esccole$ToolDB == "argannot" & cluster_esccole$cluster_rep == "5"]))
@@ -576,20 +597,20 @@ p <- sort(unique(cluster_esccole$Sample_id[cluster_esccole$ToolDB == "argannot" 
 
 cluster_esccole$Sample_id <- factor(cluster_esccole$Sample_id, levels = c(h,z,j,k,l,m,n,o,p))
 
-colors <- c( "blue4", "orangered", "seagreen4", "salmon", "goldenrod1", "royalblue", "magenta", "turquoise2", "maroon", "yellowgreen","moccasin")
+colors <- c( "darkblue", "orangered", "seagreen4", "salmon", "goldenrod1", "royalblue", "turquoise2", "maroon", "magenta", "black", "mediumpurple1", "yellowgreen","moccasin")
 
 cluster_esccole_heatmap <- ggplot(data = cluster_esccole, mapping = aes(x = ToolDB,
                                                                         y = Sample_id,
                                                                         fill = cluster_rep)) +
   geom_tile(colour="white", size=0.5) +
   scale_fill_manual(values = colors, labels = c("CTX-M-1 Group", "CTX-M-8 Group", "CTX-M-9 Group", "CTX-M-1 Group & CTX-M-9 Group & CMY ESBL type",  
-                                                "CTX-M-1 Group & CTX-M-9 Group", "CTX-M-9 Group & TEM ESBL type", "CMY ESBL type",
-                                                "SHV ESBL type", "TEM ESBL type", "mixed", "none")) +
+                                                "CTX-M-1 Group & CTX-M-9 Group & CMY AmpC type", "CTX-M-9 Group & TEM ESBL type", 
+                                                "SHV ESBL type", "TEM ESBL type", "CMY ESBL type", "CMY AmpC type","undefined CTX/SHV/TEM","mixed", "none")) +
   labs(x = "", y = "") +
   labs(fill = "ESBL genes") +
-  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.ticks.y = element_blank(), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
-  facet_grid(vars(factor(cluster_esccole$CeftriaxonMIC, levels = c("<= 1", "= 4", "= 8", ">= 16", ">= 32", ">= 64", "none","NA"))), vars(Tool), scales = "free", space = "free")
+  facet_grid(vars(factor(cluster_esccole$CeftriaxoneMIC, levels = c("<= 1", "= 4", "= 8", ">= 16", ">= 32", ">= 64", "none","NA"))), vars(Tool), scales = "free", space = "free")
 
 cluster_esccole_heatmap
 
@@ -598,33 +619,37 @@ cluster_esccole_heatmap
 cluster_esccol <- gene_cluster_table[c(which(gene_cluster_table$Type == "esccol")),]
 
 mbl <- c("metallo-beta-lactamase")
-tem <- c("\\bTEM-7\\b|\\bTEM-12\\b|\\bTEM-19\\b")
+tem <- c("\\bTEM-7\\b|\\bTEM-12\\b|\\bTEM-19\\b|\\bTEM-52B\\b")
 shv <- c("\\bSHV-102\\b")
 cmy <- c("\\bCMY-8\\b|\\bCMY-9\\b|\\bCMY-30\\b|\\bCMY-37\\b|\\bCMY-42\\b")
+ampc <- c("\\bCMY-2\\b|\\bCMY-4\\b|\\bCMY-111\\b|\\bCMY-59\\b")
 
 cluster_esccol$cluster_rep <- ifelse(grepl(mbl,cluster_esccol$gene_cluster) == "TRUE", 5,
+                                ifelse(grepl(ampc,cluster_esccol$gene_cluster) == "TRUE",7,
                                   ifelse(grepl(tem,cluster_esccol$gene_cluster) == "TRUE", 1,
                                      ifelse(grepl(shv,cluster_esccol$gene_cluster) == "TRUE", 2, 
                                             ifelse(grepl(cmy,cluster_esccol$gene_cluster) == "TRUE", 3, 
-                                                   ifelse(grepl("IMP-66",cluster_esccol$gene_cluster) == "TRUE",4,6)))))
+                                                   ifelse(grepl("IMP-66",cluster_esccol$gene_cluster) == "TRUE",4,6))))))
 
 cluster_esccol$cluster_rep <- as.character(cluster_esccol$cluster_rep)
+cluster_esccol$cluster_rep <- factor(cluster_esccol$cluster_rep, levels = c(1,2,3,7,4,5,6)) 
 
+v <- sort(unique(cluster_esccol$Sample_id[cluster_esccol$ToolDB == "SR" & cluster_esccol$cluster_rep == "7"]))
 q <- sort(unique(cluster_esccol$Sample_id[cluster_esccol$ToolDB == "SR" & cluster_esccol$cluster_rep == "1"]))
 r <- sort(unique(cluster_esccol$Sample_id[cluster_esccol$ToolDB == "SR" & cluster_esccol$cluster_rep == "2"]))
 s <- sort(unique(cluster_esccol$Sample_id[cluster_esccol$ToolDB == "SR" & cluster_esccol$cluster_rep == "3"]))
 t <- sort(unique(cluster_esccol$Sample_id[cluster_esccol$ToolDB == "SR" & cluster_esccol$cluster_rep == "5"]))
 u <- sort(unique(cluster_esccol$Sample_id[cluster_esccol$ToolDB == "SR" & cluster_esccol$cluster_rep == "6"]))
 
-cluster_esccol$Sample_id <- factor(cluster_esccol$Sample_id, levels = c(q,r,s,t,u))
+cluster_esccol$Sample_id <- factor(cluster_esccol$Sample_id, levels = c(v,q,r,s,t,u))
 
-colors <- c( "blue4", "orangered", "seagreen4", "magenta", "yellowgreen", "moccasin")
+colors <- c( "blue4", "orangered", "cyan", "magenta", "yellowgreen", "moccasin")
 
 cluster_esccol_heatmap <- ggplot(data = cluster_esccol, mapping = aes(x = ToolDB,
                                                                         y = Sample_id,
                                                                         fill = cluster_rep)) +
   geom_tile(colour="white", size=0.5) +
-  scale_fill_manual(values = colors, labels = c("TEM ESBL type", "SHV ESBL type", "CMY ESBL type", "IMP-66", "mixed", "none")) +
+  scale_fill_manual(values = colors, labels = c("TEM ESBL type", "SHV ESBL type", "CMY AmpC type", "IMP-66", "mixed", "none")) +
   labs(x = "", y = "") +
   labs(fill = "ESBL/Carbapenemase genes") +
   theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
@@ -816,6 +841,8 @@ heatmap_concordance$Tool <- ifelse(heatmap_concordance$ToolDB == "rgi", "RGI",
 colors <- c("darkgreen", "red2", "red4", "gold", "green3", "orangered", "yellow", "goldenrod1", "green")
 label <- c("Carbapenemase/Carbapenemase", "Carbapenemase/ESBL", "Carbapenemase/none", "ESBL/Carbapenemase", "ESBL/ESBL", "ESBL/none", "none/Carbapenemase", "none/ESBL", "none/none")
 
+heatmap_concordance$Sample_id <- factor(heatmap_concordance$Sample_id, levels = c(a, b, c, d, e, f, g, h,z,j,k,l,m,n,o,p, v,q,r,s,t,u)) 
+
 concordance_heatmap <- ggplot(data = heatmap_concordance, mapping = aes(x = ToolDB,
                                                                         y = Sample_id,
                                                                         fill = Concordance)) +
@@ -845,8 +872,8 @@ concordance_heatmap_esccolc <- ggplot(data = heatmap_concordance_esccolc, mappin
   labs(fill = "Reported/Genotype") +
   theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
-  facet_grid(vars(factor(heatmap_concordance_esccolc$MeropenemMIC, levels = c("<= 0.5", "= 0.75","<= 1", "= 2",
-                                                                  "= 4", "= 8", ">= 16", "none","NA"))), vars(Tool), scales = "free", space = "free")
+  facet_grid(vars(factor(heatmap_concordance_esccolc$MeropenemMIC, levels = c("<= 0.25", "<= 0.5", "= 0.75","<= 1", "= 2",
+                                                                  "= 4", "= 8", ">= 16"))), vars(Tool), scales = "free", space = "free")
 
 concordance_heatmap_esccolc
 
@@ -875,7 +902,7 @@ concordance_heatmap_esccole
 ### esccol
 heatmap_concordance_esccol <- heatmap_concordance[c(which(heatmap_concordance$Type == "esccol")),]
 
-heatmap_concordance_esccol$Sample_id <- factor(heatmap_concordance_esccol$Sample_id, levels = c(q,r,s,t,u))
+heatmap_concordance_esccol$Sample_id <- factor(heatmap_concordance_esccol$Sample_id, levels = c(v,q,r,s,t,u))
 
 colors_n <- c("yellow", "goldenrod1", "green")
 label_n <- c("none/Carbapenemase", "none/ESBL", "none/none")
@@ -897,6 +924,43 @@ concordance_heatmap_esccol
 #-------------------------------------------------------------------------------
 # plot mic & phenotype
 
+all_phenotypes <- pheno_mic[,c(1,2,3,32,39,117,146,153,6,28,33,120,142,147)]
+
+all_phenotypes_table <- pivot_longer(data = all_phenotypes, 
+                               cols = -c(1:2,6:8, 12:14),
+                               names_to = "Antibiotic", 
+                               values_to = "Phenotype")
+
+colors <- c("gray", "lemonchiffon", "black", "red")
+all_phenotypes_table$Phenotype <- factor(all_phenotypes_table$Phenotype, levels = c("S", "I", "R", "0")) 
+
+all_phenotypes_heatmap <- ggplot(data = all_phenotypes_table, mapping = aes(x = Antibiotic,
+                                                                y = Sample_id,
+                                                                fill = Phenotype)) +
+  geom_tile(colour="white", size=0.5) +
+  scale_fill_manual(values = colors, labels = c("S", "I", "R", "NA")) +
+  labs(x = "", y = "") +
+  labs(fill = "Phenotype") +
+  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+        strip.background = element_blank()) +
+  facet_grid(vars(factor(all_phenotypes_table$MIC.Meropenem, levels = c("<= 0.25", "<= 0.5", "= 0.75","<= 1", "= 2",
+                                                                  "= 4", "= 8", ">= 16"))), scales = "free", space = "free")
+
+all_phenotypes_heatmap
+
+all_phenotypes_heatmap <- ggplot(data = all_phenotypes_table, mapping = aes(x = Antibiotic,
+                                                                            y = Sample_id,
+                                                                            fill = Phenotype)) +
+  geom_tile(colour="white", size=0.5) +
+  scale_fill_manual(values = colors, labels = c("S", "I", "R", "NA")) +
+  labs(x = "", y = "") +
+  labs(fill = "Phenotype") +
+  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+        strip.background = element_blank()) +
+  facet_grid(vars(LGM_BK), scales = "free", space = "free")
+
+all_phenotypes_heatmap
+
 # Carbapenems
 ## mero, imi, erta
 
@@ -911,8 +975,8 @@ mero_imi_table <- pivot_longer(data = mero_imi,
 
 mero_imi_table$Sample_id <- factor(mero_imi_table$Sample_id, levels = c(a,b,c,d,e,f,g))
 
-colors <- c("gray", "lemonchiffon", "black", "red")
-mero_imi_table$Phenotype <- factor(mero_imi_table$Phenotype, levels = c("S", "I", "R", "0")) 
+colors <- c("gray", "lemonchiffon", "black")
+mero_imi_table$Phenotype <- factor(mero_imi_table$Phenotype, levels = c("S", "I", "R")) 
 
 mero_imi_table$Sample_id <- factor(mero_imi_table$Sample_id, levels = c(a, b, c, d, e, f, g)) 
 
@@ -925,12 +989,12 @@ mero_imi_heatmap <- ggplot(data = mero_imi_table, mapping = aes(x = Antibiotic,
   labs(fill = "Phenotype") +
   theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
-  facet_grid(vars(factor(mero_imi_table$MIC.Meropenem, levels = c("<= 0.5", "= 0.75","<= 1", "= 2",
-                                                                  "= 4", "= 8", ">= 16", "none","NA"))), scales = "free", space = "free")
+  facet_grid(vars(factor(mero_imi_table$MIC.Meropenem, levels = c("<= 0.25", "<= 0.5", "= 0.75","<= 1", "= 2",
+                                                                  "= 4", "= 8", ">= 16"))), scales = "free", space = "free")
 
 mero_imi_heatmap
 
-mero_imi_table$MIC.Meropenem <- factor(mero_imi_table$MIC.Meropenem, levels = c("<= 0.5", "= 0.75","<= 1", "= 2", "= 4", "= 8", ">= 16", "none","NA"))
+mero_imi_table$MIC.Meropenem <- factor(mero_imi_table$MIC.Meropenem, levels = c("<= 0.25", "<= 0.5", "= 0.75","<= 1", "= 2", "= 4", "= 8", ">= 16"))
 
 mero_mic <- ggplot(data = mero_imi_table, mapping = aes(x = "Meropenem MIC",
                                                   y = Sample_id,
@@ -941,8 +1005,8 @@ mero_mic <- ggplot(data = mero_imi_table, mapping = aes(x = "Meropenem MIC",
   labs(fill = "MIC") +
   theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
-  facet_grid(vars(factor(mero_imi_table$MIC.Meropenem, levels = c("<= 0.5", "= 0.75","<= 1", "= 2",
-                                                            "= 4", "= 8", ">= 16", "none","NA"))), scales = "free", space = "free")
+  facet_grid(vars(factor(mero_imi_table$MIC.Meropenem, levels = c("<= 0.25", "<= 0.5", "= 0.75","<= 1", "= 2",
+                                                            "= 4", "= 8", ">= 16"))), scales = "free", space = "free")
 
 mero_mic
 
@@ -956,8 +1020,8 @@ imi_mic <- ggplot(data = mero_imi_table, mapping = aes(x = "Imipenem MIC",
   labs(fill = "MIC") +
   theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
-  facet_grid(vars(factor(mero_imi_table$MIC.Meropenem, levels = c("<= 0.5", "= 0.75","<= 1", "= 2",
-                                                                  "= 4", "= 8", ">= 16", "none","NA"))), scales = "free", space = "free")
+  facet_grid(vars(factor(mero_imi_table$MIC.Meropenem, levels = c("<= 0.25", "<= 0.5", "= 0.75","<= 1", "= 2",
+                                                                  "= 4", "= 8", ">= 16"))), scales = "free", space = "free")
 
 imi_mic
 
@@ -971,8 +1035,8 @@ etp_mic <- ggplot(data = mero_imi_table, mapping = aes(x = "Ertapenem MIC",
   labs(fill = "MIC") +
   theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
-  facet_grid(vars(factor(mero_imi_table$MIC.Meropenem, levels = c("<= 0.5", "= 0.75","<= 1", "= 2",
-                                                                  "= 4", "= 8", ">= 16", "none","NA"))), scales = "free", space = "free")
+  facet_grid(vars(factor(mero_imi_table$MIC.Meropenem, levels = c("<= 0.25", "<= 0.5", "= 0.75","<= 1", "= 2",
+                                                                  "= 4", "= 8", ">= 16"))), scales = "free", space = "free")
 
 etp_mic
 
@@ -986,8 +1050,8 @@ cephalo_table <- pivot_longer(data = cephalo,
                                names_to = "Antibiotic", 
                                values_to = "Phenotype")
 
-colors <- c("gray", "lemonchiffon", "black", "red")
-cephalo_table$Phenotype <- factor(cephalo_table$Phenotype, levels = c("S", "I", "R", "0")) 
+colors <- c("gray", "lemonchiffon", "black")
+cephalo_table$Phenotype <- factor(cephalo_table$Phenotype, levels = c("S", "I", "R")) 
 
 cephalo_table$Sample_id <- factor(cephalo_table$Sample_id, levels = c(h,z,j,k,l,m,n,o,p))
 
@@ -995,34 +1059,34 @@ hm_cephalo_table <- ggplot(data = cephalo_table, mapping = aes(x = Antibiotic,
                                                                 y = Sample_id,
                                                                 fill = Phenotype)) +
   geom_tile(colour="white", size=0.5) +
-  scale_fill_manual(values = colors, labels = c("S", "I", "R", "NA")) +
+  scale_fill_manual(values = colors, labels = c("S", "I", "R")) +
   labs(x = "", y = "") +
   labs(fill = "Phenotype") +
   theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
-  facet_grid(vars(factor(cephalo_table$MIC.Ceftriaxon, levels = c("<= 1", "= 4", "= 8", ">= 16", ">= 32", ">= 64", "none","NA"))), scales = "free", space = "free")
+  facet_grid(vars(factor(cephalo_table$MIC.Ceftriaxone, levels = c("<= 1", "= 4", "= 8", ">= 16", ">= 32", ">= 64", "none","NA"))), scales = "free", space = "free")
 
 hm_cephalo_table
 
 
 ## Ceftriaxon
 
-heatmap_ctx <- ggplot(data = cephalo_table, mapping = aes(x = "Ceftriaxon MIC",
+heatmap_ctx <- ggplot(data = cephalo_table, mapping = aes(x = "Ceftriaxone MIC",
                                                           y = Sample_id,
-                                                          fill = MIC.Ceftriaxon)) +
+                                                          fill = MIC.Ceftriaxone)) +
   geom_tile(colour="white", size=0.5) +
   #scale_fill_manual(values = colors) +
   labs(x = "", y = "") +
   labs(fill = "MIC") +
   theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
-  facet_grid(vars(factor(cephalo_table$MIC.Ceftriaxon, levels = c("<= 1", "= 4", "= 8", ">= 16", ">= 32", ">= 64"))), scales = "free", space = "free")
+  facet_grid(vars(factor(cephalo_table$MIC.Ceftriaxone, levels = c("<= 1", "= 4", "= 8", ">= 16", ">= 32", ">= 64"))), scales = "free", space = "free")
 
 heatmap_ctx
 
 ## ceftazidim
 
-heatmap_caz <- ggplot(data = cephalo_table, mapping = aes(x = "Ceftazidim MIC",
+heatmap_caz <- ggplot(data = cephalo_table, mapping = aes(x = "Ceftazidime MIC",
                                                           y = Sample_id,
                                                           fill = MIC.Ceftazidim)) +
   geom_tile(colour="white", size=0.5) +
@@ -1038,7 +1102,7 @@ heatmap_caz
 
 ## cefepim
 
-heatmap_fep <- ggplot(data = cephalo_table, mapping = aes(x = "Cefepim MIC",
+heatmap_fep <- ggplot(data = cephalo_table, mapping = aes(x = "Cefepime MIC",
                                                           y = Sample_id,
                                                           fill = MIC.Cefepim)) +
   geom_tile(colour="white", size=0.5) +
@@ -1066,7 +1130,7 @@ cephalo_table2 <- pivot_longer(data = cephalo2,
 colors <- c("gray", "lemonchiffon", "black", "red")
 cephalo_table2$Phenotype <- factor(cephalo_table2$Phenotype, levels = c("S", "I", "R", "0")) 
 
-cephalo_table2$Sample_id <- factor(cephalo_table2$Sample_id, levels = c(q,r,s,t,u))
+cephalo_table2$Sample_id <- factor(cephalo_table2$Sample_id, levels = c(v,q,r,s,t,u))
 
 hm_cephalo_table2 <- ggplot(data = cephalo_table2, mapping = aes(x = Antibiotic,
                                                                y = Sample_id,
@@ -1084,7 +1148,7 @@ hm_cephalo_table2
 
 ## Ceftriaxon
 
-heatmap_ctx2 <- ggplot(data = cephalo_table2, mapping = aes(x = "Ceftriaxon MIC",
+heatmap_ctx2 <- ggplot(data = cephalo_table2, mapping = aes(x = "Ceftriaxone MIC",
                                                           y = Sample_id,
                                                           fill = MIC.Ceftriaxon)) +
   geom_tile(colour="white", size=0.5) +
