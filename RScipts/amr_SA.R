@@ -345,6 +345,9 @@ for (i in 1:length(gene_cluster_table$Sample_id)){
   gene_cluster_table$MIC.Oxacillin[i] <- pheno_mic$MIC.Oxacillin[which(gene_cluster_table$Sample_id[i] == pheno_mic$Sample_id)]
 }
 
+for (i in 1:length(gene_cluster_table$Sample_id)){
+  gene_cluster_table$MIC.Cefoxitin[i] <- pheno_mic$MIC.Cefoxitin[which(gene_cluster_table$Sample_id[i] == pheno_mic$Sample_id)]
+}
 
 gene_cluster_table$cluster_nr <- 0
 ind <- unique(gene_cluster_table$gene_cluster)
@@ -424,6 +427,20 @@ gene_cluster_heatmap <- ggplot(data = gene_cluster_table, mapping = aes(x = Tool
   facet_grid(vars(MIC.Oxacillin), vars(Tool), scales = "free", space = "free")
 
 gene_cluster_heatmap
+
+
+gene_cluster_heatmap_cefox <- ggplot(data = gene_cluster_table, mapping = aes(x = ToolDB,
+                                                                        y = Sample_id,
+                                                                        fill = cluster_rep)) +
+  geom_tile(colour="white", size=0.5) +
+  scale_fill_manual(values = colors, labels = c("mecA", "mecA + regulator", "mecC", "mecC + regulator", "PBP2", "mecA & mecC", "only regulator","none")) +
+  labs(x = "", y = "") +
+  labs(fill = "Genotype") +
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 4), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+        strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
+  facet_grid(vars(MIC.Cefoxitin), vars(Tool), scales = "free", space = "free")
+
+gene_cluster_heatmap_cefox
 
 
 #-------------------------------------------------------------------------------
