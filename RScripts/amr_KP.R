@@ -454,7 +454,7 @@ for (i in 1:length(gene_cluster_table$gene_cluster)) {
 gene_cluster_table$Tool <- ifelse(gene_cluster_table$ToolDB == "rgi", gene_cluster_table$Tool <- "RGI",
                                   ifelse(gene_cluster_table$ToolDB == "srax_basic" | gene_cluster_table$ToolDB == "srax_ext", gene_cluster_table$Tool <- "sraX",
                                          ifelse(gene_cluster_table$ToolDB == "resfinder_as" | gene_cluster_table$ToolDB == "resfinder_re", gene_cluster_table$Tool <- "ResFinder", 
-                                                ifelse(gene_cluster_table$ToolDB == "deeparg_LS" | gene_cluster_table$ToolDB == "deeparg_SR", gene_cluster_table$Tool <- "deepARG",
+                                                ifelse(gene_cluster_table$ToolDB == "deeparg_LS" | gene_cluster_table$ToolDB == "deeparg_SR", gene_cluster_table$Tool <- "DeepARG",
                                                        ifelse(gene_cluster_table$ToolDB == "amrf_nuc" | gene_cluster_table$ToolDB == "amrf_prot", gene_cluster_table$Tool <- "AMRFinder",
                                                               gene_cluster_table$Tool <- "ABRicate")))))
 
@@ -531,14 +531,11 @@ cluster_klepnec_heatmap <- ggplot(data = cluster_klepnec, mapping = aes(x = Tool
                                                 "NDM-7", "NDM-19","NDM", "OXA-48", "OXA-181", "OXA-232", "SHV-38", "undefined OXA","mixed", "none")) +
   labs(x = "", y = "") +
   labs(fill = "Carbapenemase genes") +
-  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 10, face = "bold"), axis.ticks.y = element_blank(), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
   facet_grid(vars(factor(cluster_klepnec$MeropenemMIC, levels = c("= 2", "= 4", "= 8", ">= 16", "> 32"))), vars(Tool), scales = "free", space = "free")
 
 cluster_klepnec_heatmap
-
-
-
 
 
 ### clusters klepnee
@@ -604,7 +601,7 @@ cluster_klepnee_heatmap <- ggplot(data = cluster_klepnee, mapping = aes(x = Tool
                                                 "CTX-M-9 Group & DHA AmpC type", "CTX-M-9 Group & OXA-48", "undefined CTX-M", "SHV ESBL type", "mixed", "none")) +
   labs(x = "", y = "") +
   labs(fill = "ESBL genes") +
-  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.ticks.y = element_blank(), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 10, face = "bold"), axis.ticks.y = element_blank(), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
   facet_grid(vars(factor(cluster_klepnee$CeftriaxoneMIC, levels = c("<= 1", "= 8", ">= 16", ">= 32", ">= 64", "NA"))), vars(Tool), scales = "free", space = "free")
 
@@ -646,7 +643,7 @@ cluster_klepne_heatmap <- ggplot(data = cluster_klepne, mapping = aes(x = ToolDB
   scale_fill_manual(values = colors, labels = c("CTX-M-9 Group & DHA-1", "CTX-M-9 Group", "DHA-1", "TEM ESBL type", "SHV ESBL type", "mixed", "none")) +
   labs(x = "", y = "") +
   labs(fill = "ESBL/Carbapenemase genes") +
-  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 10, face = "bold"), axis.ticks.y = element_blank(), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
   facet_grid(vars(factor(cluster_klepne$CeftriaxoneMIC, levels = c("<= 1", "= 4", "= 8", ">= 16"))), vars(Tool), scales = "free", space = "free")
 
@@ -827,7 +824,7 @@ heatmap_concordance[heatmap_concordance == "resfinder_re"] <- "reads"
 # include column for the different tools
 heatmap_concordance$Tool <- ifelse(heatmap_concordance$ToolDB == "rgi", "RGI",
                                    ifelse(heatmap_concordance$ToolDB == "assembly" | heatmap_concordance$ToolDB == "reads", "ResFinder",
-                                          ifelse(heatmap_concordance$ToolDB == "LS" | heatmap_concordance$ToolDB == "SR", "deepARG",
+                                          ifelse(heatmap_concordance$ToolDB == "LS" | heatmap_concordance$ToolDB == "SR", "DeepARG",
                                                  ifelse(heatmap_concordance$ToolDB == "basic" | heatmap_concordance$ToolDB == "ext", "sraX",
                                                         ifelse(heatmap_concordance$ToolDB == "nuc" | heatmap_concordance$ToolDB == "prot", "AMRFinder", "ABRicate")))))
 
@@ -864,7 +861,7 @@ concordance_heatmap_klepnec <- ggplot(data = heatmap_concordance_klepnec, mappin
   scale_fill_manual(values = colors_c, labels = label_c) +
   labs(x = "", y = "") +
   labs(fill = "Reported/Genotype") +
-  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.ticks.y = element_blank(), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 10, face = "bold"), axis.ticks.y = element_blank(), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
   facet_grid(vars(factor(heatmap_concordance_klepnec$MeropenemMIC, levels = c("= 2", "= 4", "= 8", ">= 16", "> 32"))), vars(Tool), scales = "free", space = "free")
 
@@ -885,7 +882,7 @@ concordance_heatmap_klepnee <- ggplot(data = heatmap_concordance_klepnee, mappin
   scale_fill_manual(values = colors_e, labels = label_e) +
   labs(x = "", y = "") +
   labs(fill = "Reported/Genotype") +
-  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 10, face = "bold"), axis.ticks.y = element_blank(), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
   facet_grid(vars(factor(heatmap_concordance_klepnee$CeftriaxoneMIC, levels = c("= 8", ">= 16", ">= 32", ">= 64", "NA"))), vars(Tool), scales = "free", space = "free")
 
@@ -907,7 +904,7 @@ concordance_heatmap_klepne <- ggplot(data = heatmap_concordance_klepne, mapping 
   scale_fill_manual(values = colors_n, labels = label_n) +
   labs(x = "", y = "") +
   labs(fill = "Reported/Genotype") +
-  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.ticks.y = element_blank(), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 10, face = "bold"), axis.ticks.y = element_blank(), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
   facet_grid(vars(factor(cluster_klepne$CeftriaxoneMIC, levels = c("<= 1", "= 4", "= 8", ">= 16"))), vars(Tool), scales = "free", space = "free")
 
@@ -980,7 +977,7 @@ mero_imi_heatmap <- ggplot(data = mero_imi_table, mapping = aes(x = Antibiotic,
   scale_fill_manual(values = colors, labels = c("S", "I", "R", "NA")) +
   labs(x = "", y = "") +
   labs(fill = "Phenotype") +
-  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
   facet_grid(vars(factor(mero_imi_table$MIC.Meropenem, levels = c("= 2", "= 4", "= 8", ">= 16", "> 32"))), scales = "free", space = "free")
 
@@ -995,7 +992,7 @@ mero_mic <- ggplot(data = mero_imi_table, mapping = aes(x = "Meropenem MIC",
   #scale_fill_manual(values = colors) +
   labs(x = "", y = "") +
   labs(fill = "MIC") +
-  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
   facet_grid(vars(factor(mero_imi_table$MIC.Meropenem, levels = c("= 2", "= 4", "= 8", ">= 16", "> 32"))), scales = "free", space = "free")
 
@@ -1053,7 +1050,7 @@ hm_cephalo_table <- ggplot(data = cephalo_table, mapping = aes(x = Antibiotic,
   scale_fill_manual(values = colors, labels = c("S", "I", "R", "NA")) +
   labs(x = "", y = "") +
   labs(fill = "Phenotype") +
-  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
   facet_grid(vars(factor(cephalo_table$MIC.Ceftriaxone, levels = c("= 8", ">= 16", ">= 32", ">= 64", "NA"))), scales = "free", space = "free")
 
@@ -1069,7 +1066,7 @@ heatmap_ctx <- ggplot(data = cephalo_table, mapping = aes(x = "Ceftriaxone MIC",
   #scale_fill_manual(values = colors) +
   labs(x = "", y = "") +
   labs(fill = "MIC") +
-  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
   facet_grid(vars(factor(cephalo_table$MIC.Ceftriaxone, levels = c("<= 1", "= 8", ">= 16", ">= 32", ">= 64"))), scales = "free", space = "free")
 
@@ -1130,7 +1127,7 @@ hm_cephalo_table2 <- ggplot(data = cephalo_table2, mapping = aes(x = Antibiotic,
   scale_fill_manual(values = colors, labels = c("S", "I", "R", "NA")) +
   labs(x = "", y = "") +
   labs(fill = "Phenotype") +
-  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
   facet_grid(vars(factor(cephalo_table2$MIC.Ceftriaxone, levels = c("<= 1", "= 3","= 4", "= 8", ">= 16"))), scales = "free", space = "free")
 
@@ -1146,7 +1143,7 @@ heatmap_ctx2 <- ggplot(data = cephalo_table2, mapping = aes(x = "Ceftriaxone MIC
   #scale_fill_manual(values = colors) +
   labs(x = "", y = "") +
   labs(fill = "MIC") +
-  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
   facet_grid(vars(factor(cephalo_table2$MIC.Ceftriaxone, levels = c("<= 1", "= 3","= 4", "= 8", ">= 16"))), scales = "free", space = "free")
 
