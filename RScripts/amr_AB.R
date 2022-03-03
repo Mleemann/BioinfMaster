@@ -322,27 +322,37 @@ for (i in 1:length(gene_cluster_table$gene_cluster)) {
 # 5: OXA-24           6: OXA-72 & OXA-66  7: NDM-1 & OXA-72 & OXA-66    8: OXA-90
 # 9: OXA-72 & OXA-92  10: OXA-66
 
-oxa51 <- "OXA-120|OXA-317|OXA-430|OXA-562|OXA-685|OXA-69|OXA-70|OXA-714|OXA-853|OXA-91|OXA-94"
+oxa51 <- "OXA-51|OXA-66|OXA-68|OXA-69|OXA-70|OXA-90|OXA-91|OXA-92|OXA-94|OXA-120|OXA-317|OXA-430|OXA-562|OXA-685|OXA-714|OXA-853"
 
-gene_cluster_table$cluster_rep <- ifelse(grepl("OXA-23",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-58",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-66",gene_cluster_table$gene_cluster) == "TRUE", 3, 
-                                         ifelse(grepl("NDM-1",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-72",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-66",gene_cluster_table$gene_cluster) == "TRUE", 7,
-                                                ifelse(grepl("OXA-23",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-66",gene_cluster_table$gene_cluster) == "TRUE", 1,
-                                                       ifelse(grepl("OXA-23",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-58",gene_cluster_table$gene_cluster) == "TRUE", 2,
-                                                              ifelse(grepl("OXA-23",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-68",gene_cluster_table$gene_cluster) == "TRUE", 4,
-                                                                     ifelse(grepl("OXA-23",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-91",gene_cluster_table$gene_cluster) == "TRUE", 12,      
-                                                                            ifelse(grepl("OXA-24",gene_cluster_table$gene_cluster) == "TRUE", 5,
-                                                                                   ifelse(grepl("OXA-72",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-66",gene_cluster_table$gene_cluster) == "TRUE", 6, 
-                                                                                          ifelse(grepl("OXA-90",gene_cluster_table$gene_cluster) == "TRUE", 8,
-                                                                                                 ifelse(grepl("OXA-72",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-92",gene_cluster_table$gene_cluster) == "TRUE", 9,
-                                                                                                        ifelse(grepl("OXA-66",gene_cluster_table$gene_cluster) == "TRUE", gene_cluster_table$cluster_rep <- 10,
-                                                                                                               ifelse(grepl("OXA-51",gene_cluster_table$gene_cluster) == "TRUE", gene_cluster_table$cluster_rep <- 13,
-                                                                                                                      ifelse(grepl("OXA-92",gene_cluster_table$gene_cluster) == "TRUE", gene_cluster_table$cluster_rep <- 14,
-                                                                                                                             ifelse(grepl(oxa51,gene_cluster_table$gene_cluster) == "TRUE", gene_cluster_table$cluster_rep <- 11,0))))))))))))))
+#gene_cluster_table$cluster_rep <- ifelse(grepl("OXA-23",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-58",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-66",gene_cluster_table$gene_cluster) == "TRUE", 3, 
+ #                                        ifelse(grepl("NDM-1",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-72",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-66",gene_cluster_table$gene_cluster) == "TRUE", 7,
+  #                                              ifelse(grepl("OXA-23",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-66",gene_cluster_table$gene_cluster) == "TRUE", 1,
+   #                                                    ifelse(grepl("OXA-23",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-58",gene_cluster_table$gene_cluster) == "TRUE", 2,
+    #                                                          ifelse(grepl("OXA-23",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-68",gene_cluster_table$gene_cluster) == "TRUE", 4,
+     #                                                                ifelse(grepl("OXA-23",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-91",gene_cluster_table$gene_cluster) == "TRUE", 12,      
+      #                                                                      ifelse(grepl("OXA-24",gene_cluster_table$gene_cluster) == "TRUE", 5,
+       #                                                                            ifelse(grepl("OXA-72",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-66",gene_cluster_table$gene_cluster) == "TRUE", 6, 
+        #                                                                                  ifelse(grepl("OXA-90",gene_cluster_table$gene_cluster) == "TRUE", 8,
+         #                                                                                        ifelse(grepl("OXA-72",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-92",gene_cluster_table$gene_cluster) == "TRUE", 9,
+          #                                                                                              ifelse(grepl("OXA-66",gene_cluster_table$gene_cluster) == "TRUE", gene_cluster_table$cluster_rep <- 10,
+           #                                                                                                    ifelse(grepl("OXA-51",gene_cluster_table$gene_cluster) == "TRUE", gene_cluster_table$cluster_rep <- 13,
+            #                                                                                                          ifelse(grepl("OXA-92",gene_cluster_table$gene_cluster) == "TRUE", gene_cluster_table$cluster_rep <- 14,
+             #                                                                                                                ifelse(grepl(oxa51,gene_cluster_table$gene_cluster) == "TRUE", gene_cluster_table$cluster_rep <- 11,0))))))))))))))
+
+
+gene_cluster_table$cluster_rep <- ifelse(grepl("OXA-23",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-58",gene_cluster_table$gene_cluster) == "TRUE" & grepl(oxa51,gene_cluster_table$gene_cluster) == "TRUE", 4, 
+                                        ifelse(grepl("NDM-1",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-72",gene_cluster_table$gene_cluster) == "TRUE" & grepl(oxa51,gene_cluster_table$gene_cluster) == "TRUE", 1,
+                                              ifelse(grepl("OXA-23",gene_cluster_table$gene_cluster) == "TRUE" & grepl(oxa51,gene_cluster_table$gene_cluster) == "TRUE", 2,
+                                                    ifelse(grepl("OXA-23",gene_cluster_table$gene_cluster) == "TRUE" & grepl("OXA-58",gene_cluster_table$gene_cluster) == "TRUE", 3,
+                                                           ifelse(grepl("OXA-24",gene_cluster_table$gene_cluster) == "TRUE" & grepl(oxa51,gene_cluster_table$gene_cluster) == "TRUE", 5,
+                                                                  ifelse(grepl("OXA-72",gene_cluster_table$gene_cluster) == "TRUE" & grepl(oxa51,gene_cluster_table$gene_cluster) == "TRUE", 6, 
+                                                                         ifelse(grepl(oxa51,gene_cluster_table$gene_cluster) == "TRUE", gene_cluster_table$cluster_rep <- 7,
+                                                                                ifelse(grepl("\\bOXA\\b",gene_cluster_table$gene_cluster) == "TRUE", 8, 10))))))))
 
 
 for (i in 1:length(gene_cluster_table$Sample_id)) {
   if (gene_cluster_table$ToolDB[i] == "deeparg_SR") {
-    gene_cluster_table$cluster_rep[i] <- 15
+    gene_cluster_table$cluster_rep[i] <- 9
   }
 } 
 
@@ -351,7 +361,7 @@ gene_cluster_table$cluster_rep <- as.character(gene_cluster_table$cluster_rep)
 gene_cluster_table$Tool <- ifelse(gene_cluster_table$ToolDB == "rgi", gene_cluster_table$Tool <- "RGI",
                                   ifelse(gene_cluster_table$ToolDB == "srax_basic" | gene_cluster_table$ToolDB == "srax_ext", gene_cluster_table$Tool <- "sraX",
                                          ifelse(gene_cluster_table$ToolDB == "resfinder_as" | gene_cluster_table$ToolDB == "resfinder_re", gene_cluster_table$Tool <- "ResFinder", 
-                                                ifelse(gene_cluster_table$ToolDB == "deeparg_LS" | gene_cluster_table$ToolDB == "deeparg_SR", gene_cluster_table$Tool <- "deepARG",
+                                                ifelse(gene_cluster_table$ToolDB == "deeparg_LS" | gene_cluster_table$ToolDB == "deeparg_SR", gene_cluster_table$Tool <- "DeepARG",
                                                        ifelse(gene_cluster_table$ToolDB == "amrf_nuc" | gene_cluster_table$ToolDB == "amrf_prot", gene_cluster_table$Tool <- "AMRFinder",
                                                               gene_cluster_table$Tool <- "ABRicate")))))
 
@@ -371,24 +381,13 @@ gene_cluster_table[gene_cluster_table == "resfinder_re"] <- "reads"
 
 
 # order legend
-gene_cluster_table$cluster_rep <- factor(gene_cluster_table$cluster_rep, levels = c(1,2,3,4,12,5,6,9,7,10,8,13,14,11,15,0)) 
-colors <- c("blue4", "blue", "deepskyblue3", "deepskyblue1", "powderblue","yellow", "green3", "green", "black", "brown", "coral", "red","magenta","mediumpurple1", "yellowgreen", "moccasin" )
+#gene_cluster_table$cluster_rep <- factor(gene_cluster_table$cluster_rep, levels = c(1,2,3,4,12,5,6,9,7,10,8,13,14,11,15,0)) 
+#c("OXA-23 & OXA-66", "OXA-23 & OXA-58", "OXA-23 & OXA-66 & OXA-58", 
+#  "OXA-23 & OXA-68", "OXA-23 & OXA-91", "OXA-24", "OXA-72 & OXA-66", "OXA-72 & OXA-92", 
+#  "NDM-1 & OXA-72 & OXA-66", "OXA-66", "OXA-90", "OXA-51",
+#  "OXA-92","OXA-51 type", "mixed", "none"))
 
-gene_cluster_heatmap <- ggplot(data = gene_cluster_table, mapping = aes(x = ToolDB,
-                                                                        y = Sample_id,
-                                                                        fill = cluster_rep)) +
-  geom_tile(colour="white", size=0.5) +
-  scale_fill_manual(values = colors, labels = c("OXA-23 & OXA-66", "OXA-23 & OXA-58", "OXA-23 & OXA-66 & OXA-58", 
-                                                "OXA-23 & OXA-68", "OXA-23 & OXA-91", "OXA-24", "OXA-72 & OXA-66", "OXA-72 & OXA-92", 
-                                                "NDM-1 & OXA-72 & OXA-66", "OXA-66", "OXA-90", "OXA-51",
-                                                "OXA-92","OXA-51 type", "mixed", "none")) +
-  labs(x = "", y = "") +
-  labs(fill = "Carbapenemase genes") +
-  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, angle = 90, hjust=1, vjust=0.5), 
-        strip.text.x = element_text(size = 6), strip.text.y = element_text(size = 6), panel.background = element_rect(color = "white", linetype = "solid")) +
-  facet_grid(vars(Type), vars(Tool), scales = "free", space = "free")
-
-gene_cluster_heatmap
+colors <- c("black", "blue", "deepskyblue3", "green3", "seagreen2", "orange", "mediumpurple1", "yellowgreen", "moccasin" )
 
 a <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "argannot" & gene_cluster_table$cluster_rep == "1"]))
 b <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "argannot" & gene_cluster_table$cluster_rep == "2"]))
@@ -396,26 +395,20 @@ c <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "arga
 d <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "argannot" & gene_cluster_table$cluster_rep == "4"]))
 e <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "argannot" & gene_cluster_table$cluster_rep == "5"]))
 f <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "argannot" & gene_cluster_table$cluster_rep == "6"]))
-g <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "argannot" & gene_cluster_table$cluster_rep == "9"]))
-h <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "argannot" & gene_cluster_table$cluster_rep == "7"]))
-i <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "argannot" & gene_cluster_table$cluster_rep == "10"]))
-j <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "argannot" & gene_cluster_table$cluster_rep == "8"]))
-k <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "argannot" & gene_cluster_table$cluster_rep == "13"]))
-l <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "argannot" & gene_cluster_table$cluster_rep == "11"]))
+g <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "argannot" & gene_cluster_table$cluster_rep == "7"]))
 
-gene_cluster_table$Sample_id <- factor(gene_cluster_table$Sample_id, levels = c(a,b,c,d,e,f,g,h,i,j,k,l))
+gene_cluster_table$Sample_id <- factor(gene_cluster_table$Sample_id, levels = c(a,b,c,d,e,f,g))
+gene_cluster_table$cluster_rep <- factor(gene_cluster_table$cluster_rep, levels = c(1,2,3,4,5,6,7,8,9,10)) 
 
 gene_cluster_heatmap <- ggplot(data = gene_cluster_table, mapping = aes(x = ToolDB,
                                                                         y = Sample_id,
                                                                         fill = cluster_rep)) +
   geom_tile(colour="white", size=0.5) +
-  scale_fill_manual(values = colors, labels = c("OXA-23 & OXA-66", "OXA-23 & OXA-58", "OXA-23 & OXA-66 & OXA-58", 
-                                                "OXA-23 & OXA-68", "OXA-23 & OXA-91", "OXA-24", "OXA-72 & OXA-66", "OXA-72 & OXA-92", 
-                                                "NDM-1 & OXA-72 & OXA-66", "OXA-66", "OXA-90", "OXA-51",
-                                                "OXA-92","OXA-51 type", "mixed", "none")) +
+  scale_fill_manual(values = colors, labels = c("NDM-1 & OXA-72 & OXA-51 family", "OXA-23 & OXA-51 family", "OXA-23 & OXA-58 & OXA-51 family",  
+                                                "OXA-24 & OXA-51 family" , "OXA-72 & OXA-51 family",  "OXA-51 family", "undefined OXA", "mixed", "none")) +
   labs(x = "", y = "") +
   labs(fill = "Carbapenemase genes") +
-  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 10, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
   facet_grid(vars(factor(gene_cluster_table$MeropenemMIC, levels = c("<= 0.25", ">= 16"))), vars(Tool), scales = "free", space = "free")
 
@@ -529,7 +522,7 @@ heatmap_concordance[heatmap_concordance == "resfinder_re"] <- "reads"
 # include column for the different tools
 heatmap_concordance$Tool <- ifelse(heatmap_concordance$ToolDB == "rgi", "RGI",
                                    ifelse(heatmap_concordance$ToolDB == "assembly" | heatmap_concordance$ToolDB == "reads", "ResFinder",
-                                          ifelse(heatmap_concordance$ToolDB == "LS" | heatmap_concordance$ToolDB == "SR", "deepARG",
+                                          ifelse(heatmap_concordance$ToolDB == "LS" | heatmap_concordance$ToolDB == "SR", "DeepARG",
                                                  ifelse(heatmap_concordance$ToolDB == "basic" | heatmap_concordance$ToolDB == "ext", "sraX",
                                                         ifelse(heatmap_concordance$ToolDB == "nuc" | heatmap_concordance$ToolDB == "prot", "AMRFinder", "ABRicate")))))
 
@@ -539,7 +532,7 @@ heatmap_concordance$Tool <- ifelse(heatmap_concordance$ToolDB == "rgi", "RGI",
 # create heatmap
 colors <- c("darkgreen", "green", "gold", "red3")
 
-heatmap_concordance$Sample_id <- factor(heatmap_concordance$Sample_id, levels = c(a,b,c,d,e,f,g,h,i,j,k,l))
+heatmap_concordance$Sample_id <- factor(heatmap_concordance$Sample_id, levels = c(a,b,c,d,e,f,g))
 
 concordance_heatmap <- ggplot(data = heatmap_concordance, mapping = aes(x = ToolDB,
                                                                         y = Sample_id,
@@ -548,11 +541,31 @@ concordance_heatmap <- ggplot(data = heatmap_concordance, mapping = aes(x = Tool
   scale_fill_manual(values = colors, labels = c("R/R", "S/S", "S/R", "R/S")) +
   labs(x = "", y = "") +
   labs(fill = "Phenotype/Genotype") +
-  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.ticks.y = element_blank(), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
   facet_grid(vars(factor(heatmap_concordance$MeropenemMIC, levels = c("<= 0.25", ">= 16"))), vars(Tool), scales = "free", space = "free")
 
 concordance_heatmap
+
+
+heatmap_concordance2 <- heatmap_concordance
+
+heatmap_concordance2 <- cbind(heatmap_concordance2, gene_cluster_table[7])
+heatmap_concordance2$Concordance[which(heatmap_concordance2$Concordance == 3 & heatmap_concordance2$cluster_rep == 7)] <- 2
+heatmap_concordance2$Concordance[which(heatmap_concordance2$Concordance == 1 & heatmap_concordance2$cluster_rep == 7)] <- 4
+
+concordance_heatmap2 <- ggplot(data = heatmap_concordance2, mapping = aes(x = ToolDB,
+                                                                        y = Sample_id,
+                                                                        fill = Concordance)) +
+  geom_tile(colour="white", size=0.5) +
+  scale_fill_manual(values = colors, labels = c("R/R", "S/S", "S/R", "R/S")) +
+  labs(x = "", y = "") +
+  labs(fill = "Phenotype/Genotype") +
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 10, face = "bold"), axis.ticks.y = element_blank(), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+        strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
+  facet_grid(vars(factor(heatmap_concordance2$MeropenemMIC, levels = c("<= 0.25", ">= 16"))), vars(Tool), scales = "free", space = "free")
+
+concordance_heatmap2
 
 
 #-------------------------------------------------------------------------------
@@ -567,7 +580,7 @@ mero_imi_table <- pivot_longer(data = mero_imi,
 res <- which(mero_imi_table$Phenotype == "NULL")
 mero_imi_table$Phenotype[res] <- "R"
 
-mero_imi_table$Sample_id <- factor(mero_imi_table$Sample_id, levels = c(a,b,c,d,e,f,g,h,i,j,k,l))
+mero_imi_table$Sample_id <- factor(mero_imi_table$Sample_id, levels = c(a,b,c,d,e,f,g))
 
 colors <- c("gray", "lemonchiffon", "black")
 mero_imi_table$Phenotype <- factor(mero_imi_table$Phenotype, levels = c("S", "I", "R")) 
@@ -579,25 +592,14 @@ mero_imi_heatmap <- ggplot(data = mero_imi_table, mapping = aes(x = Antibiotic,
   scale_fill_manual(values = colors, labels = c("S", "I", "R")) +
   labs(x = "", y = "") +
   labs(fill = "Phenotype") +
-  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
-  facet_grid(vars(LGM_BK), scales = "free", space = "free")
-
-mero_imi_heatmap
-
-mero_imi_heatmap <- ggplot(data = mero_imi, mapping = aes(x = Antibiotic,
-                                                          y = Sample_id,
-                                                          fill = Phenotype)) +
-  geom_tile(colour="white", size=0.5) +
-  scale_fill_manual(values = colors) +
-  labs(x = "", y = "") +
-  labs(fill = "Phenotype") +
-  theme(strip.text.y = element_text(size = 8), axis.text.y = element_text(size = 8), axis.text.x = element_text(size = 8, angle = 90, hjust=1, vjust=0.5)) +
   facet_grid(vars(MIC.Meropenem), scales = "free", space = "free")
 
 mero_imi_heatmap
 
-mero_imi$Sample_id <- factor(mero_imi$Sample_id, levels = c(a,b,c,d,e,f,g,h,i,j,k,l))
+
+mero_imi$Sample_id <- factor(mero_imi$Sample_id, levels = c(a,b,c,d,e,f,g))
 
 colors <- c("gray", "black")
 
@@ -608,7 +610,7 @@ mero_mic <- ggplot(data = mero_imi, mapping = aes(x = "Meropenem MIC",
   #scale_fill_manual(values = colors) +
   labs(x = "", y = "") +
   labs(fill = "MIC") +
-  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
   facet_grid(vars(factor(mero_imi$MIC.Meropenem, levels = c("<= 0.25", ">= 16"))), scales = "free", space = "free")
 
