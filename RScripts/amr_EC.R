@@ -472,7 +472,7 @@ for (i in 1:length(gene_cluster_table$gene_cluster)) {
 gene_cluster_table$Tool <- ifelse(gene_cluster_table$ToolDB == "rgi", gene_cluster_table$Tool <- "RGI",
                                   ifelse(gene_cluster_table$ToolDB == "srax_basic" | gene_cluster_table$ToolDB == "srax_ext", gene_cluster_table$Tool <- "sraX",
                                          ifelse(gene_cluster_table$ToolDB == "resfinder_as" | gene_cluster_table$ToolDB == "resfinder_re", gene_cluster_table$Tool <- "ResFinder", 
-                                                ifelse(gene_cluster_table$ToolDB == "deeparg_LS" | gene_cluster_table$ToolDB == "deeparg_SR", gene_cluster_table$Tool <- "deepARG",
+                                                ifelse(gene_cluster_table$ToolDB == "deeparg_LS" | gene_cluster_table$ToolDB == "deeparg_SR", gene_cluster_table$Tool <- "DeepARG",
                                                        ifelse(gene_cluster_table$ToolDB == "amrf_nuc" | gene_cluster_table$ToolDB == "amrf_prot", gene_cluster_table$Tool <- "AMRFinder",
                                                               gene_cluster_table$Tool <- "ABRicate")))))
 
@@ -535,8 +535,8 @@ cluster_esccolc_heatmap <- ggplot(data = cluster_esccolc, mapping = aes(x = Tool
                                                 "NDM", "OXA-48", "OXA-181", "OXA-244", 
                                                 "undefined OXA", "mixed", "none")) +
   labs(x = "", y = "") +
-  labs(fill = "Carbapenemase genes") +
-  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  labs(fill = "Carbapenemase genes")
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 10, face = "bold"), axis.ticks.y = element_blank(), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
   facet_grid(vars(factor(cluster_esccolc$MeropenemMIC, levels = c("<= 0.25", "<= 0.5", "= 0.75","<= 1", "= 2",
                                                                      "= 4", "= 8", ">= 16"))), vars(Tool), scales = "free", space = "free")
@@ -608,7 +608,7 @@ cluster_esccole_heatmap <- ggplot(data = cluster_esccole, mapping = aes(x = Tool
                                                 "SHV ESBL type", "TEM ESBL type", "CMY ESBL type", "CMY AmpC type","undefined CTX/SHV/TEM","mixed", "none")) +
   labs(x = "", y = "") +
   labs(fill = "ESBL genes") +
-  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.ticks.y = element_blank(), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 10, face = "bold"), axis.ticks.y = element_blank(), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
   facet_grid(vars(factor(cluster_esccole$CeftriaxoneMIC, levels = c("<= 1", "= 4", "= 8", ">= 16", ">= 32", ">= 64", "none","NA"))), vars(Tool), scales = "free", space = "free")
 
@@ -652,9 +652,9 @@ cluster_esccol_heatmap <- ggplot(data = cluster_esccol, mapping = aes(x = ToolDB
   scale_fill_manual(values = colors, labels = c("TEM ESBL type", "SHV ESBL type", "CMY AmpC type", "IMP-66", "mixed", "none")) +
   labs(x = "", y = "") +
   labs(fill = "ESBL/Carbapenemase genes") +
-  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 10, face = "bold"), axis.ticks.y = element_blank(), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
-  facet_grid(vars(factor(cluster_esccol$CeftriaxonMIC, levels = c("<= 1", "= 2","= 4", "= 8", ">= 16", ">= 32", ">= 64", "none","NA"))), vars(Tool), scales = "free", space = "free")
+  facet_grid(vars(factor(cluster_esccol$CeftriaxoneMIC, levels = c("<= 1", "= 2","= 4", "= 8", ">= 16", ">= 32", ">= 64", "none","NA"))), vars(Tool), scales = "free", space = "free")
 
 cluster_esccol_heatmap
 
@@ -833,7 +833,7 @@ heatmap_concordance[heatmap_concordance == "resfinder_re"] <- "reads"
 # include column for the different tools
 heatmap_concordance$Tool <- ifelse(heatmap_concordance$ToolDB == "rgi", "RGI",
                                    ifelse(heatmap_concordance$ToolDB == "assembly" | heatmap_concordance$ToolDB == "reads", "ResFinder",
-                                          ifelse(heatmap_concordance$ToolDB == "LS" | heatmap_concordance$ToolDB == "SR", "deepARG",
+                                          ifelse(heatmap_concordance$ToolDB == "LS" | heatmap_concordance$ToolDB == "SR", "DeepARG",
                                                  ifelse(heatmap_concordance$ToolDB == "basic" | heatmap_concordance$ToolDB == "ext", "sraX",
                                                         ifelse(heatmap_concordance$ToolDB == "nuc" | heatmap_concordance$ToolDB == "prot", "AMRFinder", "ABRicate")))))
 
@@ -870,7 +870,7 @@ concordance_heatmap_esccolc <- ggplot(data = heatmap_concordance_esccolc, mappin
   scale_fill_manual(values = colors_c, labels = label_c) +
   labs(x = "", y = "") +
   labs(fill = "Reported/Genotype") +
-  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 10, face = "bold"), axis.ticks.y = element_blank(), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
   facet_grid(vars(factor(heatmap_concordance_esccolc$MeropenemMIC, levels = c("<= 0.25", "<= 0.5", "= 0.75","<= 1", "= 2",
                                                                   "= 4", "= 8", ">= 16"))), vars(Tool), scales = "free", space = "free")
@@ -892,9 +892,9 @@ concordance_heatmap_esccole <- ggplot(data = heatmap_concordance_esccole, mappin
   scale_fill_manual(values = colors_e, labels = label_e) +
   labs(x = "", y = "") +
   labs(fill = "Reported/Genotype") +
-  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 10, face = "bold"), axis.ticks.y = element_blank(), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
-  facet_grid(vars(factor(heatmap_concordance_esccole$CeftriaxonMIC, levels = c("<= 1", "= 4", "= 8", ">= 16", ">= 32", ">= 64", "none","NA"))), vars(Tool), scales = "free", space = "free")
+  facet_grid(vars(factor(heatmap_concordance_esccole$CeftriaxoneMIC, levels = c("<= 1", "= 4", "= 8", ">= 16", ">= 32", ">= 64", "none","NA"))), vars(Tool), scales = "free", space = "free")
 
 concordance_heatmap_esccole
 
@@ -914,9 +914,9 @@ concordance_heatmap_esccol <- ggplot(data = heatmap_concordance_esccol, mapping 
   scale_fill_manual(values = colors_n, labels = label_n) +
   labs(x = "", y = "") +
   labs(fill = "Reported/Genotype") +
-  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 10, face = "bold"), axis.ticks.y = element_blank(), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
-  facet_grid(vars(factor(cluster_esccol$CeftriaxonMIC, levels = c("<= 1", "= 2","= 4", "= 8", ">= 16", ">= 32", ">= 64", "none","NA"))), vars(Tool), scales = "free", space = "free")
+  facet_grid(vars(factor(cluster_esccol$CeftriaxoneMIC, levels = c("<= 1", "= 2","= 4", "= 8", ">= 16", ">= 32", ">= 64", "none","NA"))), vars(Tool), scales = "free", space = "free")
 
 concordance_heatmap_esccol
 
@@ -987,7 +987,7 @@ mero_imi_heatmap <- ggplot(data = mero_imi_table, mapping = aes(x = Antibiotic,
   scale_fill_manual(values = colors, labels = c("S", "I", "R", "NA")) +
   labs(x = "", y = "") +
   labs(fill = "Phenotype") +
-  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
   facet_grid(vars(factor(mero_imi_table$MIC.Meropenem, levels = c("<= 0.25", "<= 0.5", "= 0.75","<= 1", "= 2",
                                                                   "= 4", "= 8", ">= 16"))), scales = "free", space = "free")
@@ -1003,7 +1003,7 @@ mero_mic <- ggplot(data = mero_imi_table, mapping = aes(x = "Meropenem MIC",
   #scale_fill_manual(values = colors) +
   labs(x = "", y = "") +
   labs(fill = "MIC") +
-  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
   facet_grid(vars(factor(mero_imi_table$MIC.Meropenem, levels = c("<= 0.25", "<= 0.5", "= 0.75","<= 1", "= 2",
                                                             "= 4", "= 8", ">= 16"))), scales = "free", space = "free")
@@ -1062,7 +1062,7 @@ hm_cephalo_table <- ggplot(data = cephalo_table, mapping = aes(x = Antibiotic,
   scale_fill_manual(values = colors, labels = c("S", "I", "R")) +
   labs(x = "", y = "") +
   labs(fill = "Phenotype") +
-  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
   facet_grid(vars(factor(cephalo_table$MIC.Ceftriaxone, levels = c("<= 1", "= 4", "= 8", ">= 16", ">= 32", ">= 64", "none","NA"))), scales = "free", space = "free")
 
@@ -1078,7 +1078,7 @@ heatmap_ctx <- ggplot(data = cephalo_table, mapping = aes(x = "Ceftriaxone MIC",
   #scale_fill_manual(values = colors) +
   labs(x = "", y = "") +
   labs(fill = "MIC") +
-  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
   facet_grid(vars(factor(cephalo_table$MIC.Ceftriaxone, levels = c("<= 1", "= 4", "= 8", ">= 16", ">= 32", ">= 64"))), scales = "free", space = "free")
 
@@ -1139,9 +1139,9 @@ hm_cephalo_table2 <- ggplot(data = cephalo_table2, mapping = aes(x = Antibiotic,
   scale_fill_manual(values = colors, labels = c("S", "I", "R", "NA")) +
   labs(x = "", y = "") +
   labs(fill = "Phenotype") +
-  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
-  facet_grid(vars(factor(cephalo_table2$MIC.Ceftriaxon, levels = c("<= 1", "= 2","= 4", "= 8", ">= 16", ">= 32", ">= 64", "none","NA"))), scales = "free", space = "free")
+  facet_grid(vars(factor(cephalo_table2$MIC.Ceftriaxone, levels = c("<= 1", "= 2","= 4", "= 8", ">= 16", ">= 32", ">= 64", "none","NA"))), scales = "free", space = "free")
 
 hm_cephalo_table2
 
@@ -1150,13 +1150,13 @@ hm_cephalo_table2
 
 heatmap_ctx2 <- ggplot(data = cephalo_table2, mapping = aes(x = "Ceftriaxone MIC",
                                                           y = Sample_id,
-                                                          fill = MIC.Ceftriaxon)) +
+                                                          fill = MIC.Ceftriaxone)) +
   geom_tile(colour="white", size=0.5) +
   #scale_fill_manual(values = colors) +
   labs(x = "", y = "") +
   labs(fill = "MIC") +
-  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
-  facet_grid(vars(factor(cephalo_table2$MIC.Ceftriaxon, levels = c("<= 1", "= 2","= 4", "= 8", ">= 16", ">= 32", ">= 64"))), scales = "free", space = "free")
+  facet_grid(vars(factor(cephalo_table2$MIC.Ceftriaxone, levels = c("<= 1", "= 2","= 4", "= 8", ">= 16", ">= 32", ">= 64"))), scales = "free", space = "free")
 
 heatmap_ctx2
