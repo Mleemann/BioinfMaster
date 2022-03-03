@@ -375,19 +375,19 @@ rep_six <- c(11)
 rep_seven <- c(13)
 
 gene_cluster_table$cluster_rep <- ifelse(gene_cluster_table$cluster_nr %in% rep_one, gene_cluster_table$cluster_rep <- 1,
-                                         ifelse(gene_cluster_table$cluster_nr %in% rep_two, gene_cluster_table$cluster_rep <- 2,
+                                         ifelse(gene_cluster_table$cluster_nr %in% rep_two, gene_cluster_table$cluster_rep <- 1,
                                                 ifelse(gene_cluster_table$cluster_nr %in% rep_three, gene_cluster_table$cluster_rep <- 3, 
-                                                       ifelse(gene_cluster_table$cluster_nr %in% rep_four, gene_cluster_table$cluster_rep <- 4,
+                                                       ifelse(gene_cluster_table$cluster_nr %in% rep_four, gene_cluster_table$cluster_rep <- 3,
                                                               ifelse(gene_cluster_table$cluster_nr %in% rep_five, gene_cluster_table$cluster_rep <- 5, 
                                                                      ifelse(gene_cluster_table$cluster_nr %in% rep_six, gene_cluster_table$cluster_rep <- 6, 
-                                                                            ifelse(gene_cluster_table$cluster_nr %in% rep_seven, gene_cluster_table$cluster_rep <- 7, gene_cluster_table$cluster_rep <- 0))))))) 
+                                                                            ifelse(gene_cluster_table$cluster_nr %in% rep_seven, gene_cluster_table$cluster_rep <- 0, gene_cluster_table$cluster_rep <- 0))))))) 
 
 gene_cluster_table$cluster_rep <- as.character(gene_cluster_table$cluster_rep)
 
 gene_cluster_table$Tool <- ifelse(gene_cluster_table$ToolDB == "rgi", gene_cluster_table$Tool <- "RGI",
                                   ifelse(gene_cluster_table$ToolDB == "sraX_basic" | gene_cluster_table$ToolDB == "sraX_ext", gene_cluster_table$Tool <- "sraX",
                                          ifelse(gene_cluster_table$ToolDB == "resfinder_as" | gene_cluster_table$ToolDB == "resfinder_re", gene_cluster_table$Tool <- "ResFinder", 
-                                                ifelse(gene_cluster_table$ToolDB == "deeparg_LS" | gene_cluster_table$ToolDB == "deeparg_SR", gene_cluster_table$Tool <- "deepARG",
+                                                ifelse(gene_cluster_table$ToolDB == "deeparg_LS" | gene_cluster_table$ToolDB == "deeparg_SR", gene_cluster_table$Tool <- "DeepARG",
                                                        ifelse(gene_cluster_table$ToolDB == "amrf_nuc" | gene_cluster_table$ToolDB == "amrf_prot", gene_cluster_table$Tool <- "AMRFinder",
                                                               gene_cluster_table$Tool <- "ABRicate")))))
 
@@ -413,34 +413,20 @@ b <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "arga
 c <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "argannot" & (gene_cluster_table$cluster_rep == "0")]))
 
 gene_cluster_table$Sample_id <- factor(gene_cluster_table$Sample_id, levels = c(a, b, c)) 
-colors <- c("blue4", "blue1", "red3", "sienna1", "turquoise", "magenta", "yellowgreen","moccasin")
+colors <- c("blue4", "sienna1", "turquoise", "magenta", "moccasin")
 
 gene_cluster_heatmap <- ggplot(data = gene_cluster_table, mapping = aes(x = ToolDB,
                                                                         y = Sample_id,
                                                                         fill = cluster_rep)) +
   geom_tile(colour="white", size=0.5) +
-  scale_fill_manual(values = colors, labels = c("mecA", "mecA + regulator", "mecC", "mecC + regulator", "PBP2", "mecA & mecC", "only regulator","none")) +
+  scale_fill_manual(values = colors, labels = c("mecA", "mecC", "PBP2", "mecA & mecC", "none")) +
   labs(x = "", y = "") +
   labs(fill = "Genotype") +
-  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 4), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 10, face = "bold"), axis.ticks.y = element_blank(), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
   facet_grid(vars(MIC.Oxacillin), vars(Tool), scales = "free", space = "free")
 
 gene_cluster_heatmap
-
-
-gene_cluster_heatmap_cefox <- ggplot(data = gene_cluster_table, mapping = aes(x = ToolDB,
-                                                                        y = Sample_id,
-                                                                        fill = cluster_rep)) +
-  geom_tile(colour="white", size=0.5) +
-  scale_fill_manual(values = colors, labels = c("mecA", "mecA + regulator", "mecC", "mecC + regulator", "PBP2", "mecA & mecC", "only regulator","none")) +
-  labs(x = "", y = "") +
-  labs(fill = "Genotype") +
-  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 4), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
-        strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
-  facet_grid(vars(MIC.Cefoxitin), vars(Tool), scales = "free", space = "free")
-
-gene_cluster_heatmap_cefox
 
 
 #-------------------------------------------------------------------------------
@@ -556,7 +542,7 @@ heatmap_ox[heatmap_ox == "resfinder_re"] <- "reads"
 # include column for the different tools
 heatmap_ox$Tool <- ifelse(heatmap_ox$ToolDB == "rgi", "RGI",
                           ifelse(heatmap_ox$ToolDB == "assembly" | heatmap_ox$ToolDB == "reads", "ResFinder",
-                                 ifelse(heatmap_ox$ToolDB == "LS" | heatmap_ox$ToolDB == "SR", "deepARG",
+                                 ifelse(heatmap_ox$ToolDB == "LS" | heatmap_ox$ToolDB == "SR", "DeepARG",
                                         ifelse(heatmap_ox$ToolDB == "basic" | heatmap_ox$ToolDB == "ext", "sraX",
                                                ifelse(heatmap_ox$ToolDB == "nuc" | heatmap_ox$ToolDB == "prot", "AMRFinder", "ABRicate")))))
 
@@ -590,7 +576,7 @@ OX_heatmap2 <- ggplot(data = heatmap_ox, mapping = aes(x = ToolDB,
   scale_fill_manual(values = colors, labels = c("R/R", "S/S", "S/R", "R/S")) +
   labs(x = "", y = "") +
   labs(fill = "Resistance intepretation/Genotype") +
-  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 4), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 10, face = "bold"), axis.text.y = element_text(size = 4), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
   facet_grid(vars(MIC.Oxacillin), vars(Tool), scales = "free", space = "free")
 
@@ -641,7 +627,7 @@ heatmap_ox_peni <- ggplot(data = pheno_ox_peni_table, mapping = aes(x = "Oxacill
   #scale_fill_manual(values = colors) +
   labs(x = "", y = "") +
   labs(fill = "MIC") + 
-  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 4), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 4), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         plot.background = element_rect(fill = 'white')) +
   facet_grid(vars(MIC.Oxacillin), scales = "free_y", space = "free", switch = "y")
 
