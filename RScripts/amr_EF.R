@@ -356,7 +356,7 @@ gene_cluster_table$cluster_rep <- as.character(gene_cluster_table$cluster_rep)
 gene_cluster_table$Tool <- ifelse(gene_cluster_table$ToolDB == "rgi", gene_cluster_table$Tool <- "RGI",
                                   ifelse(gene_cluster_table$ToolDB == "srax_basic" | gene_cluster_table$ToolDB == "srax_ext", gene_cluster_table$Tool <- "sraX",
                                          ifelse(gene_cluster_table$ToolDB == "resfinder_as" | gene_cluster_table$ToolDB == "resfinder_re", gene_cluster_table$Tool <- "ResFinder", 
-                                                ifelse(gene_cluster_table$ToolDB == "deeparg_LS" | gene_cluster_table$ToolDB == "deeparg_SR", gene_cluster_table$Tool <- "deepARG",
+                                                ifelse(gene_cluster_table$ToolDB == "deeparg_LS" | gene_cluster_table$ToolDB == "deeparg_SR", gene_cluster_table$Tool <- "DeepARG",
                                                        ifelse(gene_cluster_table$ToolDB == "amrf_nuc" | gene_cluster_table$ToolDB == "amrf_prot", gene_cluster_table$Tool <- "AMRFinder",
                                                               gene_cluster_table$Tool <- "ABRicate")))))
 
@@ -384,11 +384,14 @@ for (i in 1:length(gene_cluster_table$Sample_id)){
 # order legend
 gene_cluster_table$cluster_rep <- factor(gene_cluster_table$cluster_rep, levels = c(1,6,2,3,4,5,7,0)) 
 
-a <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$cluster_rep == "1" | gene_cluster_table$cluster_rep == "2" | gene_cluster_table$cluster_rep == "6"]))
-b <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$cluster_rep == "3" | gene_cluster_table$cluster_rep == "4"]))
-c <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$cluster_rep == "0"]))
+a <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "argannot" & gene_cluster_table$cluster_rep == "1"])) 
+b <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "argannot" & gene_cluster_table$cluster_rep == "2"]))
+c <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "argannot" & gene_cluster_table$cluster_rep == "6"]))
+d <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "argannot" & gene_cluster_table$cluster_rep == "3"]))
+e <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "argannot" & gene_cluster_table$cluster_rep == "4"]))
+f <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "argannot" & gene_cluster_table$cluster_rep == "0"]))
 
-gene_cluster_table$Sample_id <- factor(gene_cluster_table$Sample_id, levels = c(a, b, c)) 
+gene_cluster_table$Sample_id <- factor(gene_cluster_table$Sample_id, levels = c(a, b, c, d, e, f)) 
 colors <- c("blue4", "blue1", "dodgerblue2", "orangered", "sienna1", "plum1", "yellowgreen", "moccasin")
 
 gene_cluster_heatmap <- ggplot(data = gene_cluster_table, mapping = aes(x = ToolDB,
@@ -398,7 +401,7 @@ gene_cluster_heatmap <- ggplot(data = gene_cluster_table, mapping = aes(x = Tool
   scale_fill_manual(values = colors, labels = c("complete vanA operon", "partial vanA operon incl. vanZA", "partial vanA operon", "complete vanB operon", "partial vanB operon", "mixed", "only regulator" , "none")) +
   labs(x = "", y = "") +
   labs(fill = "Genotype") +
-  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 10, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
   facet_grid(vars(factor(gene_cluster_table$MIC, levels = c("= 0", "<= 0.5", "= 1", "= 2",  "= 8", "= 12", "= 24",">= 32", "> 256" ))), vars(Tool), scales = "free", space = "free")
 
@@ -545,7 +548,7 @@ heatmap_table[heatmap_table == "van_resfinder_re"] <- "reads"
 # include column for the different tools
 heatmap_table$Tool <- ifelse(heatmap_table$ToolDB == "van_rgi", "RGI",
                              ifelse(heatmap_table$ToolDB == "assembly" | heatmap_table$ToolDB == "reads", "ResFinder",
-                                    ifelse(heatmap_table$ToolDB == "LS" | heatmap_table$ToolDB == "SR", "deepARG",
+                                    ifelse(heatmap_table$ToolDB == "LS" | heatmap_table$ToolDB == "SR", "DeepARG",
                                            ifelse(heatmap_table$ToolDB == "basic" | heatmap_table$ToolDB == "ext", "sraX",
                                                   ifelse(heatmap_table$ToolDB == "nuc" | heatmap_table$ToolDB == "prot", "AMRFinder", "ABRicate")))))
 
@@ -570,7 +573,7 @@ EF_heatmap <- ggplot(data = heatmap_table, mapping = aes(x = ToolDB,
 EF_heatmap
 
 
-heatmap_table$Sample_id <- factor(heatmap_table$Sample_id, levels = c(a, b, c)) 
+heatmap_table$Sample_id <- factor(heatmap_table$Sample_id, levels = c(a, b, c, d, e, f)) 
 
 EF_heatmap <- ggplot(data = heatmap_table, mapping = aes(x = ToolDB,
                                                          y = Sample_id,
@@ -579,7 +582,7 @@ EF_heatmap <- ggplot(data = heatmap_table, mapping = aes(x = ToolDB,
   scale_fill_manual(values = colors, labels = c("R/R", "S/S", "R/S")) +
   labs(x = "", y = "") +
   labs(fill = "Phenotype/Genotype") +
-  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 10, face = "bold"), axis.ticks.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
   facet_grid(vars(factor(heatmap_table$MIC.Vancomycin, levels = c("= 0", "<= 0.5", "= 1", "= 2",  "= 8", "= 12", "= 24", ">= 32", "> 256" ))), 
              vars(Tool), scales = "free", space = "free")
@@ -597,7 +600,7 @@ van_tei_table <- pivot_longer(data = heatmap_table,
 
 colors <- c("black", "grey")
 
-van_tei_table$Sample_id <- factor(van_tei_table$Sample_id, levels = c(a, b, c)) 
+van_tei_table$Sample_id <- factor(van_tei_table$Sample_id, levels = c(a, b, c, d, e, f)) 
 
 van_tei_heatmap <- ggplot(data = van_tei_table, mapping = aes(x = Antibiotic,
                                                               y = Sample_id,
@@ -606,7 +609,7 @@ van_tei_heatmap <- ggplot(data = van_tei_table, mapping = aes(x = Antibiotic,
   scale_fill_manual(values = colors) +
   labs(x = "", y = "") +
   labs(fill = "Phenotype") +
-  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
   facet_grid(vars(factor(van_tei_table$MIC.Vancomycin, levels = c("= 0", "<= 0.5", "= 1", "= 2",  "= 8", "= 12", "= 24", ">= 32", "> 256" ))), scales = "free", space = "free")
 
@@ -622,7 +625,7 @@ van_tei_heatmap2 <- ggplot(data = van_tei_table, mapping = aes(x = "Vancomycin M
   #scale_fill_manual(values = colors) +
   labs(x = "", y = "") +
   labs(fill = "MIC") +
-  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
   facet_grid(vars(factor(van_tei_table$MIC.Vancomycin, levels = c("= 0", "<= 0.5", "= 1", "= 2",  "= 8", "= 12", "= 24", ">= 32", "> 256" ))), scales = "free", space = "free")
 
