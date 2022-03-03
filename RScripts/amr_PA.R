@@ -355,8 +355,8 @@ gene_cluster_table$cluster_rep <- ifelse(grepl("\\bVIM-1\\b",gene_cluster_table$
                                                        ifelse(grepl("OXA-573",gene_cluster_table$gene_cluster) == "TRUE", 4, 
                                                               ifelse(grepl("metallo-beta-lactamase", gene_cluster_table$gene_cluster) == "TRUE", 5,
                                                                      ifelse(grepl("OXA-418",gene_cluster_table$gene_cluster) == "TRUE", 5, 
-                                                                            ifelse(grepl("OXA-202",gene_cluster_table$gene_cluster) == "TRUE", 5, 
-                                                                                   ifelse(grepl("oprD",gene_cluster_table$gene_cluster) == "TRUE", 7,6))))))))
+                                                                            ifelse(grepl("OXA-202",gene_cluster_table$gene_cluster) == "TRUE", 5, 6)))))))
+                                                                                   #ifelse(grepl("oprD",gene_cluster_table$gene_cluster) == "TRUE", 7)
 
 for (i in 1:length(gene_cluster_table$Sample_id)) {
   if (gene_cluster_table$ToolDB[i] == "deeparg_SR" & gene_cluster_table$Type[i] == "pseaerc") {
@@ -364,15 +364,15 @@ for (i in 1:length(gene_cluster_table$Sample_id)) {
   }
 }
 
-part_oprd_srax_b <- srax_basic$Sample_id[which(srax_basic$amr_genes == "oprD" & srax_basic$Status_hit == "Partial gene, no gaps")]
-part_oprd_srax_e <- srax_ext$Sample_id[which(srax_ext$amr_genes == "oprD" & srax_ext$Status_hit == "Partial gene, no gaps")]
+#part_oprd_srax_b <- srax_basic$Sample_id[which(srax_basic$amr_genes == "oprD" & srax_basic$Status_hit == "Partial gene, no gaps")]
+#part_oprd_srax_e <- srax_ext$Sample_id[which(srax_ext$amr_genes == "oprD" & srax_ext$Status_hit == "Partial gene, no gaps")]
 
-for (i in 1:length(gene_cluster_table$Sample_id)) {
-  if ((gene_cluster_table$Sample_id[i] %in% part_oprd_srax_b & gene_cluster_table$ToolDB[i] == "srax_basic") | 
-      (gene_cluster_table$Sample_id[i] %in% part_oprd_srax_e & gene_cluster_table$ToolDB[i] == "srax_ext")) {
-    gene_cluster_table$cluster_rep[i] <- 8
-  }
-}  
+#for (i in 1:length(gene_cluster_table$Sample_id)) {
+#  if ((gene_cluster_table$Sample_id[i] %in% part_oprd_srax_b & gene_cluster_table$ToolDB[i] == "srax_basic") | 
+#      (gene_cluster_table$Sample_id[i] %in% part_oprd_srax_e & gene_cluster_table$ToolDB[i] == "srax_ext")) {
+#    gene_cluster_table$cluster_rep[i] <- 8
+#  }
+#}  
 
 
 gene_cluster_table$cluster_rep <- as.character(gene_cluster_table$cluster_rep)
@@ -380,7 +380,7 @@ gene_cluster_table$cluster_rep <- as.character(gene_cluster_table$cluster_rep)
 gene_cluster_table$Tool <- ifelse(gene_cluster_table$ToolDB == "rgi", gene_cluster_table$Tool <- "RGI",
                                   ifelse(gene_cluster_table$ToolDB == "srax_basic" | gene_cluster_table$ToolDB == "srax_ext", gene_cluster_table$Tool <- "sraX",
                                          ifelse(gene_cluster_table$ToolDB == "resfinder_as" | gene_cluster_table$ToolDB == "resfinder_re", gene_cluster_table$Tool <- "ResFinder", 
-                                                ifelse(gene_cluster_table$ToolDB == "deeparg_LS" | gene_cluster_table$ToolDB == "deeparg_SR", gene_cluster_table$Tool <- "deepARG",
+                                                ifelse(gene_cluster_table$ToolDB == "deeparg_LS" | gene_cluster_table$ToolDB == "deeparg_SR", gene_cluster_table$Tool <- "DeepARG",
                                                        ifelse(gene_cluster_table$ToolDB == "amrf_nuc" | gene_cluster_table$ToolDB == "amrf_prot", gene_cluster_table$Tool <- "AMRFinder",
                                                               gene_cluster_table$Tool <- "ABRicate")))))
 
@@ -400,8 +400,8 @@ gene_cluster_table[gene_cluster_table == "resfinder_re"] <- "reads"
 
 
 # order legend
-gene_cluster_table$cluster_rep <- factor(gene_cluster_table$cluster_rep, levels = c(1,2,3,5,4,7,8,6)) 
-colors <- c("blue4", "blue", "lightsteelblue", "yellowgreen", "orangered", "magenta", "mediumpurple1", "moccasin")
+gene_cluster_table$cluster_rep <- factor(gene_cluster_table$cluster_rep, levels = c(1,2,3,5,4,6)) 
+colors <- c("blue4", "blue", "lightsteelblue", "yellowgreen", "orangered", "moccasin")
 
 a <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "argannot" & gene_cluster_table$cluster_rep == "1"]))
 b <- sort(unique(gene_cluster_table$Sample_id[gene_cluster_table$ToolDB == "argannot" & gene_cluster_table$cluster_rep == "2"]))
@@ -414,7 +414,7 @@ gene_cluster_heatmap <- ggplot(data = gene_cluster_table, mapping = aes(x = Tool
                                                                         y = Sample_id,
                                                                         fill = cluster_rep)) +
   geom_tile(colour="white", size=0.5) +
-  scale_fill_manual(values = colors, labels = c("VIM-1", "VIM-2", "VIM", "mixed", "OXA-573", "oprD", "partial oprD","none")) +
+  scale_fill_manual(values = colors, labels = c("VIM-1", "VIM-2", "VIM", "mixed", "OXA-573", "none")) +
   labs(x = "", y = "") +
   labs(fill = "Carbapenemase genes") +
   theme(axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 8, angle = 90, hjust=1, vjust=0.5), 
@@ -427,10 +427,10 @@ gene_cluster_heatmap <- ggplot(data = gene_cluster_table, mapping = aes(x = Tool
                                                                         y = Sample_id,
                                                                         fill = cluster_rep)) +
   geom_tile(colour="white", size=0.5) +
-  scale_fill_manual(values = colors, labels = c("VIM-1", "VIM-2", "VIM", "mixed", "OXA-573", "oprD", "partial oprD", "none")) +
+  scale_fill_manual(values = colors, labels = c("VIM-1", "VIM-2", "VIM", "mixed", "OXA-573", "none")) +
   labs(x = "", y = "") +
   labs(fill = "Carbapenemase genes") +
-  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 10, face = "bold"), axis.ticks.y = element_blank(), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
   facet_grid(vars(factor(gene_cluster_table$MeropenemMIC, levels = c("<= 0.25", "","<= 0.5", "= 0.75","= 1", "= 2",
                                                                       "= 3", "= 4", "= 6", "= 8", ">= 16", "> 32", "NA"))), vars(Tool), scales = "free", space = "free")
@@ -545,7 +545,7 @@ heatmap_concordance[heatmap_concordance == "resfinder_re"] <- "reads"
 # include column for the different tools
 heatmap_concordance$Tool <- ifelse(heatmap_concordance$ToolDB == "rgi", "RGI",
                                    ifelse(heatmap_concordance$ToolDB == "assembly" | heatmap_concordance$ToolDB == "reads", "ResFinder",
-                                          ifelse(heatmap_concordance$ToolDB == "LS" | heatmap_concordance$ToolDB == "SR", "deepARG",
+                                          ifelse(heatmap_concordance$ToolDB == "LS" | heatmap_concordance$ToolDB == "SR", "DeepARG",
                                                  ifelse(heatmap_concordance$ToolDB == "basic" | heatmap_concordance$ToolDB == "ext", "sraX",
                                                         ifelse(heatmap_concordance$ToolDB == "nuc" | heatmap_concordance$ToolDB == "prot", "AMRFinder", "ABRicate")))))
 
@@ -561,9 +561,9 @@ concordance_heatmap <- ggplot(data = heatmap_concordance, mapping = aes(x = Tool
                                                                         y = Sample_id,
                                                                         fill = Concordance)) +
   geom_tile(colour="white", size=0.5) +
-  scale_fill_manual(values = colors, labels = c("R/R", "S/S", "S/R", "R/S")) +
+  scale_fill_manual(values = colors, labels = c("Carbapenemase/Carbapenemase", "None/None", "None/Carbapenemase", "Carbapenemase/None")) +
   labs(x = "", y = "") +
-  labs(fill = "Phenotype/Genotype") +
+  labs(fill = "Reported/Genotype") +
   theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
   facet_grid(vars(factor(heatmap_concordance$MeropenemMIC, levels = c("<= 0.25", "","<= 0.5", "= 0.75","= 1", "= 2",
@@ -571,6 +571,22 @@ concordance_heatmap <- ggplot(data = heatmap_concordance, mapping = aes(x = Tool
 
 concordance_heatmap
 
+heatmap_concordance_rgi <- heatmap_concordance
+heatmap_concordance_rgi$Concordance[which(heatmap_concordance_rgi$Concordance == 3 & heatmap_concordance_rgi$Tool == "RGI")] <- 2
+
+concordance_heatmap_rgi <- ggplot(data = heatmap_concordance_rgi, mapping = aes(x = ToolDB,
+                                                                        y = Sample_id,
+                                                                        fill = Concordance)) +
+  geom_tile(colour="white", size=0.5) +
+  scale_fill_manual(values = colors, labels = c("Carbapenemase/Carbapenemase", "None/None", "None/Carbapenemase", "Carbapenemase/None")) +
+  labs(x = "", y = "") +
+  labs(fill = "Reported/Genotype") +
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 10, face = "bold"), axis.ticks.y = element_blank(), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+        strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
+  facet_grid(vars(factor(heatmap_concordance_rgi$MeropenemMIC, levels = c("<= 0.25", "","<= 0.5", "= 0.75","= 1", "= 2",
+                                                                      "= 3", "= 4", "= 6", "= 8", ">= 16", "> 32", "NA"))), vars(Tool), scales = "free", space = "free")
+
+concordance_heatmap_rgi
 
 #-------------------------------------------------------------------------------
 # plot mero imi phenotypes
@@ -594,7 +610,7 @@ mero_imi_heatmap <- ggplot(data = mero_imi_table, mapping = aes(x = Antibiotic,
   scale_fill_manual(values = colors, labels = c("S", "I", "R")) +
   labs(x = "", y = "") +
   labs(fill = "Phenotype") +
-  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
   facet_grid(vars(LGM_BK), scales = "free", space = "free")
 
@@ -607,7 +623,7 @@ mero_imi_heatmap <- ggplot(data = mero_imi_table, mapping = aes(x = Antibiotic,
   scale_fill_manual(values = colors) +
   labs(x = "", y = "") +
   labs(fill = "Phenotype") +
-  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
   facet_grid(vars(factor(mero_imi_table$MIC.Meropenem, levels = c("<= 0.25", "","<= 0.5", "= 0.75","= 1", "= 2",
                                                             "= 3", "= 4", "= 6", "= 8", ">= 16", "> 32", "NA"))), scales = "free", space = "free")
@@ -624,7 +640,7 @@ mero_mic <- ggplot(data = mero_imi, mapping = aes(x = "Meropenem MIC",
   #scale_fill_manual(values = colors) +
   labs(x = "", y = "") +
   labs(fill = "MIC") +
-  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_blank()) +
   facet_grid(vars(factor(mero_imi$MIC.Meropenem, levels = c("<= 0.25", "","<= 0.5", "= 0.75","= 1", "= 2",
                                                             "= 3", "= 4", "= 6", "= 8", ">= 16", "> 32", "NA"))), scales = "free", space = "free")
@@ -653,7 +669,7 @@ porin_heatmap <- ggplot(data = porin, mapping = aes(x = "oprD",
   scale_fill_manual(values = colors, labels = c("intact", "mutation")) +
   labs(x = "", y = "") +
   labs(fill = "oprD") +
-  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 8, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 10, face = "bold", angle = 90, hjust=1, vjust=0.5), 
+  theme(strip.text.y = element_blank(), strip.text.x = element_text(size = 10, face = "bold"), axis.text.y = element_text(size = 6), axis.text.x = element_text(size = 12, face = "bold", angle = 90, hjust=1, vjust=0.5), 
         strip.background = element_rect(colour="black", fill="white", size=1.5, linetype="solid"), plot.background = element_rect(fill = 'white')) +
   facet_grid(vars(factor(porin$MeropenemMIC, levels = c("<= 0.25", "","<= 0.5", "= 0.75","= 1", "= 2",
                                                                       "= 3", "= 4", "= 6", "= 8", ">= 16", "> 32", "NA"))), scales = "free", space = "free")
